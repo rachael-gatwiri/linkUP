@@ -24,6 +24,8 @@
       <p class="text-sm text-center mb-4">Enter new Password</p>
       <!-- Form -->
       <form>
+        <div id="successMessage" class="text-red-500 text-center mt-2"></div>
+        <div id="errorMessage" class="text-red-500 text-center mt-2"></div>
         <div class="mb-4 max-tablet:mb-2">
           <input type="password" id="password" class="w-full border bg-lightGrey rounded p-2 text-xs" placeholder="Password">
         </div>
@@ -34,13 +36,14 @@
           Reset Password
         </button>
       </form>
-      <p class="text-center text-gray-500 mt-16">
+      <p class="text-center text-gray-500 mt-8 mb-3">
         <button class="text-secondary bg-lightGrey w-full py-1">
           <a href="../index.html">Back to Login</a>
         </button>
       </p>
     </div>
    </div>
+   <script src="../js/resetPwd.js"></script>
 </body>
 </html>
 
