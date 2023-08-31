@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>linkUp Reset Password</title>
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2.0.0/dist/tailwind.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="flex flex-col  h-screen bg-primary">
+
+    <!-- Navbar -->
+    <nav class="flex w-full  border-b-2   border-b-secondary items-center">
+      <img class="w-18 h-14 pl-6" src="../Images/logo.png" alt="">
+    </nav>
+    <!-- Horizontal line -->
+   <div class="flex justify-center items-center mt-6 max-tablet:mt-0">
+    <div class="border-2 border-grey px-8  rounded bg-primary max-w-screen-md max-tablet:border-none">
+      <div class="flex justify-center items-center">
+        <!-- Logo -->
+        <img src="../Images/forgotPwd.png" alt="Logo" class="w-15 h-13">
+      </div>
+      <h1 class="text-4xl font-extrabold mb-2 text-center">Forgot Password?</h1>
+      <p class="text-sm text-center mb-4 ">Enter your email and we'll send you a link to Reset Password</p>
+      <!-- Form -->
+      <form>
+        <div class="mb-4 max-tablet:mb-2">
+          <input type="email" id="email" class="w-full border bg-lightGrey rounded p-2 text-xs" placeholder="Email">
+        </div>
+        <button type="submit" class="w-full bg-blue hover:bg-lightBlue text-primary py-2 mb-4 rounded">
+          Reset Password
+        </button>
+      </form>
+      <!-- two lines but 'OR ' IN THE MIDDLE -->
+      <p class="text-center text-lightGrey mb-2 max-tablet:mt-0 font-bold">OR</p>
+      <a href="../htmlFiles/signup.html" class="text-blue hover:text-lightBlue">
+        <p class="text-center text-blue mb-6 font-bold  ">Create new Account</p>
+      </a>
+      <p class="max-tablet:mt-6 text-center">
+        <button class="text-lightGrey bg-lightGrey w-full py-2 mb-2 text-xs font-normal rounded max-tablet:mt-16">
+          <a href="../index.html" class="max-tablet:pt-0">Back to Login</a>
+        </button>
+      </p>
+    </div>
+   </div>
+</body>
+</html>
