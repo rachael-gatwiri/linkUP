@@ -10,25 +10,25 @@
   <div class="border-2 border-gray p-8 max-w-screen-lg rounded-lg bg-white max-tablet:border-none">
     <div class="flex justify-center items-center mb-9" >
       <!-- Logo -->
-      <img src="./Images/logo.png" alt="Logo" class="w-18 h-15">
+      <img src="./Images/logo.png" alt="logo" class="w-18 h-15" data-cy="logo">
     </div>
     <!-- Form -->
     <form>
       <div id="errorMessage" class="text-red-500 text-center mt-2"></div>
       <div class="mb-4 max-tablet:mb-8">
-        <input type="email" id="email" class="w-full border bg-lightGrey  rounded p-2 text-xs" placeholder="Email" >
+        <input type="text" id="email" class="w-full border bg-lightGrey  rounded p-2 text-xs" placeholder="Email">
       </div>
       <div class="mb-4 max-tablet:mb-8">
         <input type="password" id="password" class="w-full border bg-lightGrey  rounded p-2 text-xs" placeholder="Password">
       </div>
       <button type="submit" id="signupButton" class="w-full bg-blue hover:bg-lightBlue text-primary py-2 mb-4 rounded">
-        Sign Up
+       Login
       </button>
     </form>
     <a href="./htmlFiles/forgotPwd.html" id="forgotPwdLink" class=" text-blue hover:text-lightBlue pl-13" >
         Forgot Password?
     </a>
-    <p class="mt-6 max-tablet:mt-6 text-center text-gray-500 text-base" >
+    <p class="mt-6 max-tablet:mt-6 text-center text-gray-500 text-base" data-cy="registerLink" >
       Don't have an account? <a href="./htmlFiles/signup.html" id="registerLink" class="text-blue hover:text-lightBlue text-base">Register here</a>
     </p>
   </div>

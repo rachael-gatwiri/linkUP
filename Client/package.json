@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build" : "tailwindcss -i input.css -o css/style.css",
-    "watch" : "tailwindcss -i input.css -o css/style.css --watch"
+    "build": "tailwindcss -i input.css -o css/style.css",
+    "watch": "tailwindcss -i input.css -o css/style.css --watch",
+    "cypress:open": "cypress open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "cypress": "^13.1.0",
     "tailwindcss": "^3.3.3"
   }
 }

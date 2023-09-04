@@ -542,6 +542,10 @@ video {
   margin-bottom: 48px;
 }
 
+.mt-2 {
+  margin-top: 8px;
+}
+
 .mt-6 {
   margin-top: 46px;
 }
@@ -575,7 +579,7 @@ video {
 }
 
 .rounded-lg {
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
 }
 
 .border {
@@ -593,7 +597,7 @@ video {
 
 .bg-lightGrey {
   --tw-bg-opacity: 1;
-  background-color: rgb(244 241 241 / var(--tw-bg-opacity));
+  background-color: rgb(149 147 147 / var(--tw-bg-opacity));
 }
 
 .bg-white {

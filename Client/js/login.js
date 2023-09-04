@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const responseData = await response.json();
   
         if (response.status === 200) {
-          // Handle successful login and redirect logic here
+          window.location.href = '../index.html';
         } else {
           if (responseData.error) {
             showError(responseData.error);

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        @media (min-width: 640px) {
+         
+          #addComment:focus {
+            outline: none;
+            border: none;
+          }
+            .footer-sidebar {
+                position: fixed;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 20%;
+                background-color: #fff;
+                padding: 1rem;
+            }
+
+            .footer-sidebar img {
+                width: 20%;
+                height: 9%;
+            }
+
+            .footer-sidebar .flex {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div>
+    <header>
+      <!-- Desktop Navbar: Hidden on Mobile -->
+      <nav class=" fixed navbar hidden md:flex md:flex-col bg-white p-4 border-l border-r border-gray-300 h-screen w-1/5">
+          <!-- Desktop Logo -->
+          <div class="mb-4 border-b border-gray-300 pb-4">
+              <img src="../Images/logo.png" alt="Logo" class="w-24">
+          </div>
+          <div class="mt-4 pt-4">
+              <span class="flex justify-items-center pt-4">
+                  <a href="../htmlFiles/home.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                      <img class="w-6 h-6 mr-2" src="../Images/homeIcon.png" alt="Home Icon">Home
+                  </a>
+              </span>
+              <span class="flex justify-items-center pt-4">
+                  <a href="#" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                      <img class="w-6 h-6 mr-2" src="../Images/addpostIcon.png" alt="Add Post Icon">Add Post
+                  </a>
+              </span>
+              <span class="flex justify-items-center pt-4">
+                  <a href="../htmlFiles/userProfile.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                      <img class="w-6 h-6 mr-2" src="../Images/profileIcon.png" alt="Profile Icon">Profile
+                  </a>
+              </span> 
+          </div>
+          <!-- Desktop Logout Link -->
+          <div class="mt-auto border-t border-gray-300 pt-8">
+              <a href="../htmlFiles/logout.html" class="text-blue-500 text-lg hover:text-lightBlue hover:w-max pl-10">
+                  <i class="fas fa-sign-out-alt mr-2"></i>Logout
+              </a>
+          </div>
+      </nav>
+      
+      <!-- Mobile Navbar: Hidden on Desktop -->
+      <navbar class=" md:hidden ">
+         <div class="flex-col bg-white">
+            <span class="flex items-center justify-between border-b border-gray-500 py-4 px-4">
+                <img class="w-24" src="../Images/logo.png" alt="logo">
+                <a class="font-normal text-blue text-2xl hover:text-lightBlue" href="../htmlFiles/logout.html">Log Out</a>
+            </span>
+            <span class="flex items-center justify-between border-b border-gray-500 py-4 px-4">
+                <a class="w-9 hover:bg-gray-300" href="../htmlFiles/home.html"><img src="../Images/homeIcon.png" alt="home icon"></a>
+                <a class="w-7 hover:bg-gray-300" href="#"><img src="../Images/addpostIcon.png" alt=""></a>
+                <a class="w-7 hover:bg-gray-300" href="../htmlFiles/userProfile.html"><img src="../Images/profileIcon.png" alt=""></a>
+            </span>
+         </div>
+      </navbar>
+     </header>
+     <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
+        <div>
+            <div class="flex justify-between">
+                <h1 class="text-3xl pl-4 font-bold">Home</h1>
+                <input class="bg-gray-200 border-2 border-gray-300 pl-3 mr-4 text-sm" type="search" name="search" id="search" placeholder="Search">
+              </div>
+              <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
+                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
+                  <span class="flex-col pl-6">
+                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
+                    <p class="text-sm text-gray-500">Emma</p>
+                  </span>
+                </div>
+                <img src="../Images/profiepic.jpeg" alt="Images">
+                <div class="flex items-center mt-4"> <!-- Add margin-top for spacing -->
+                  <span class="flex pr-6">
+                    <a href=""><img class="w-5 h-5" src="../Images/likeIcon.png" alt="like Icon"></a>
+                    <span class="text-sm ml-1">25 likes</span>
+                  </span>
+                  <span class="flex">
+                   <a href=""> <img class="w-5 h-5" src="../Images/comment.png" alt="comment Icon"></a>
+                    <span class="text-sm ml-1">10 comments</span>
+                  </span>
+                </div>
+                <span class="flex">
+                  <h4 class="font-bold pr-2">Yet</h4>
+                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus excepturi enim ipsum aut numquam maiores quas aliquam, deleniti delectus inventore cum, laudantium blanditiis sequi, provident facilis amet quos omnis eaque.</p>
+                </span>
+                <div class="flex-col"> <!-- Add margin-top for spacing -->
+                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
+                </div>
+                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
+              </section>
+              <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
+                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
+                  <span class="flex-col pl-6">
+                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
+                    <p class="text-sm text-gray-500">Emma</p>
+                  </span>
+                </div>
+                <img src="../Images/profiepic.jpeg" alt="Images">
+                <div class="flex items-center mt-4"> <!-- Add margin-top for spacing -->
+                  <span class="flex pr-6">
+                    <a href=""><img class="w-5 h-5" src="../Images/likeIcon.png" alt="like Icon"></a>
+                    <span class="text-sm ml-1">25 likes</span>
+                  </span>
+                  <span class="flex">
+                   <a href=""> <img class="w-5 h-5" src="../Images/comment.png" alt="comment Icon"></a>
+                    <span class="text-sm ml-1">10 comments</span>
+                  </span>
+                </div>
+                <span class="flex">
+                  <h4 class="font-bold pr-2">Yet</h4>
+                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                </span>
+                <div class="flex-col"> <!-- Add margin-top for spacing -->
+                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
+                </div>
+                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
+              </section>
+              <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
+                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
+                  <span class="flex-col pl-6">
+                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
+                    <p class="text-sm text-gray-500">Emma</p>
+                  </span>
+                </div>
+                <img src="../Images/profiepic.jpeg" alt="Images">
+                <div class="flex items-center mt-4"> <!-- Add margin-top for spacing -->
+                  <span class="flex pr-6">
+                    <a href=""><img class="w-5 h-5" src="../Images/likeIcon.png" alt="like Icon"></a>
+                    <span class="text-sm ml-1">25 likes</span>
+                  </span>
+                  <span class="flex">
+                   <a href=""> <img class="w-5 h-5" src="../Images/comment.png" alt="comment Icon"></a>
+                    <span class="text-sm ml-1">10 comments</span>
+                  </span>
+                </div>
+                <span class="flex">
+                  <h4 class="font-bold pr-2">Yet</h4>
+                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                </span>
+                <div class="flex-col"> <!-- Add margin-top for spacing -->
+                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
+                </div>
+                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
+              </section>
+        </div>
+    
+       </main>
+    
+     <!-- Footer Sidebar -->
+     <footer class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5">
+          <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
+          <span class="flex-col pl-6">
+              <h5 class="text-lg font-bold">Emmanuella Eden</h5>
+              <p class="text-sm text-gray-500">Emma</p>
+          </span>
+     </footer>
+  </div>
+  <!-- Modal -->
+<div id="postModal" class="fixed  top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-2xl p-6 w-3/6">
+   <span>
+    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-400 text-center text-gray-600">Add Post</h2>
+   </span>
+   <span class="border-b border-gray-400 ">
+    <textarea class="w-full px-4" name="" id="" cols="30" rows="10" placeholder="Write a caption..."></textarea>
+   </span>
+   <span>
+
+   </span>
+    <form>
+      <!-- Your post form elements go here -->
+      <div class="mt-4 flex justify-start space-x-4">
+      <img class="w-6 " src="../Images/gallery.png" alt="">
+      <button class="bg-blue rounded-3xl px-6 text-primary justify-center">Choose a file</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+   
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>
