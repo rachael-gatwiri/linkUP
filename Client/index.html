@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>linkUp Signup</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2.0.0/dist/tailwind.min.css">
 </head>
 <body class="flex justify-center items-center h-screen bg-grey-100">
   <div class="border-2 border-gray p-8 max-w-screen-lg rounded-lg bg-white max-tablet:border-none">
@@ -16,10 +17,10 @@
     <form>
       <div id="errorMessage" class="text-red-500 text-center mt-2"></div>
       <div class="mb-4 max-tablet:mb-8">
-        <input type="text" id="email" class="w-full border bg-lightGrey  rounded p-2 text-xs" placeholder="Email">
+        <input type="text" id="email" class="w-full border bg-gray-300   rounded p-2 text-xs" placeholder="Email">
       </div>
       <div class="mb-4 max-tablet:mb-8">
-        <input type="password" id="password" class="w-full border bg-lightGrey  rounded p-2 text-xs" placeholder="Password">
+        <input type="password" id="password" class="w-full border hover:border-none active:border-none focus:border-none bg-gray-300   rounded p-2 text-xs" placeholder="Password">
       </div>
       <button type="submit" id="signupButton" class="w-full bg-blue hover:bg-lightBlue text-primary py-2 mb-4 rounded">
        Login

@@ -20,7 +20,7 @@ module.exports = {
         lightBlue : '#00C4FF',
         grey : '#373333',
         lightGrey : '#959393',
-        red : '#BD0707',
+        // red : '#BD0707',
         lightRed : "#B60A0A"
       },
 

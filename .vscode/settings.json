@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/Client/index.html"
+    "livePreview.defaultPreviewPath": "/Client/htmlFiles/editProfile.html",
+    "liveServer.settings.port": 5501
 }

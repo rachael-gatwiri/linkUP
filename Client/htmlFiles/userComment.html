@@ -53,10 +53,10 @@
                       <img class="w-6 h-6 mr-2" src="../Images/homeIcon.png" alt="Home Icon">Home
                   </a>
               </span>
-              <span class="flex justify-items-center pt-4">
-                  <a href="#" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
-                      <img class="w-6 h-6 mr-2" src="../Images/addpostIcon.png" alt="Add Post Icon">Add Post
-                  </a>
+              <span class="flex justify-items-center pt-4" data-toggle="modal" data-target="#postModal" id="addPostLink">
+                <a href="../htmlFiles/addpost.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2" >
+                  <img class="w-6 h-6 mr-2" src="../Images/addpostIcon.png" alt="Add Post Icon">Add Post
+                </a>
               </span>
               <span class="flex justify-items-center pt-4">
                   <a href="../htmlFiles/userProfile.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
@@ -81,7 +81,7 @@
             </span>
             <span class="flex items-center justify-between border-b border-gray-500 py-4 px-4">
                 <a class="w-9 hover:bg-gray-300" href="../htmlFiles/home.html"><img src="../Images/homeIcon.png" alt="home icon"></a>
-                <a class="w-7 hover:bg-gray-300" href="#"><img src="../Images/addpostIcon.png" alt=""></a>
+                <a class="w-7 hover:bg-gray-300" href="../htmlFiles/addpost.html"><img src="../Images/addpostIcon.png" alt=""></a>
                 <a class="w-7 hover:bg-gray-300" href="../htmlFiles/userProfile.html"><img src="../Images/profileIcon.png" alt=""></a>
             </span>
          </div>
@@ -109,7 +109,7 @@
                   </span>
                   <span class="space-x-4">
                     <button class="text-white text-sm bg-blue rounded-xl w-11">Edit</button>
-                    <button  class="text-white text-sm bg-black rounded-xl w-14">Delete</button></span>
+                    <button  class="bg-black text-white text-sm rounded-xl w-14">Delete</button></span>
               </span>
                 </div>
                   <div class="flex items-center mb-4 pt-4"> <!-- Add margin-bottom for spacing -->
