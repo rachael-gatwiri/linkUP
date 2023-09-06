@@ -6,6 +6,7 @@
   <title>linkUp Reset Password</title>
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2.0.0/dist/tailwind.min.css">
   <link rel="stylesheet" href="../css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="flex flex-col  h-screen bg-primary">
 
@@ -24,7 +25,8 @@
       <p class="text-sm text-center mb-4 ">Enter your email and we'll send you a link to Reset Password</p>
       <!-- Form -->
       <form>
-        <div id="errorMessage" class="text-red-500 text-center mt-2"></div>
+        <div id="successMessage" class="text-green-700 bg-green-300 text-center mt-2 mb-2"></div>
+      <div id="errorMessage" class="text-red-500  bg-red-100 mb-2 text-center mt-2"></div>
         <div class="mb-4 max-tablet:mb-2">
           <input type="" id="email" class="w-full border bg-gray-200 rounded p-2 text-xs" placeholder="Email">
         </div>

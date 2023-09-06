@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const password = passwordInput.value;
+        const token = window.location.search.split('=')[1];
+        const newPassword = passwordInput.value;
         const rePassword = rePasswordInput.value;
 
         function showError(message) {
@@ -26,41 +27,41 @@ document.addEventListener('DOMContentLoaded', function() {
             successMessage.textContent = '';
         }
 
-        function isValidPassword(password) {
+        function isValidPassword(newPassword) {
             const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+.,=]).{8,}$/;
-            return passwordPattern.test(password);
+            return passwordPattern.test(newPassword);
         }
 
-        if (!password || !rePassword) {
+        if (!newPassword || !rePassword) {
             showError('Both password fields are required');
             return;
         }
 
-        if (password !== rePassword) {
+        if (newPassword !== rePassword) {
             showError("Passwords don't match");
             return;
         }
 
-        if (!isValidPassword(password)) {
+        if (!isValidPassword(newPassword)) {
             let errorMessage = 'Password must contain:';
 
-            if (!/(?=.*[a-z])/.test(password)) {
+            if (!/(?=.*[a-z])/.test(newPassword)) {
                 errorMessage += ' lowercase letter,';
             }
 
-            if (!/(?=.*[A-Z])/.test(password)) {
+            if (!/(?=.*[A-Z])/.test(newPassword)) {
                 errorMessage += ' capital letter,';
             }
 
-            if (!/(?=.*\d)/.test(password)) {
+            if (!/(?=.*\d)/.test(newPassword)) {
                 errorMessage += ' number,';
             }
 
-            if (!/(?=.*[@#$%^&+=.,])/.test(password)) {
+            if (!/(?=.*[@#$%^&+=.,])/.test(newPassword)) {
                 errorMessage += ' special character (@#$%^&+.,=),';
             }
 
-            if (password.length < 8) {
+            if (newPassword.length < 8) {
                 errorMessage += ' at least 8 characters,';
             }
 
@@ -72,28 +73,30 @@ document.addEventListener('DOMContentLoaded', function() {
         removeMessages();
 
         try {
-            const response = await fetch('your_backend_endpoint_here', {
+            const response = await fetch(`http://localhost:8005/users/resetPassword`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
+
                 body: JSON.stringify({
-                    password: password,
-                }),
+                    token,
+                    newPassword
+                })
             });
-
-            const responseData = await response.json();
-
-            if (response.status === 200) {
-                showSuccess(responseData.message);
-                setTimeout(() => {
-                    window.location.href = '../index.html'; // Redirect to login page
-                }, 3000); // 3 seconds
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                // Password reset successful
+                // Redirect the user to the login page or show a success message
+                window.location.href = '/Client/index.html';
             } else {
-                showError(responseData.message);
+                showError(data.error || 'Password reset failed');
             }
         } catch (error) {
-            showError('An error occurred. Please try again.');
+            console.log(error.message);
+            // showError('An error occurred during password reset');
         }
     });
 });

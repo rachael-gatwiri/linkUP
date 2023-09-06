@@ -8,8 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
     form.addEventListener('submit', async function(event) {
       event.preventDefault();
+      
   
       const names = namesInput.value;
+      const namesArray = names.split(' ');
+      const firstName = namesArray[0];
+      const lastName = namesArray.slice(1).join(' ');
       const username = usernameInput.value;
       const email = emailInput.value;
       const password = passwordInput.value;
@@ -37,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
         showError('All fields are required');
         return;
       }
-      const namesArray = names.split(' ');
       if (namesArray.length < 2) {
           showError('Please enter at least two names');
           return;
@@ -82,32 +85,40 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   
       removeError();
-  
-      try {
-        const response = await fetch('your_backend_endpoint_here', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName: firstName,
+  try {
+    const response = await axios.post(
+        'http://localhost:8005/users/register',
+          {
+            firstName: firstName, 
+            lastName: lastName,   
             username: username,
             email: email,
-            password: password,
-          }),
-        });
-  
-        const responseData = await response.json();
-  
-        if (response.status === 200) {
-          window.location.href = '../index.html';
-        } else {
-          // Handle error messages returned from the backend
-          showError(responseData.message);
-        }
-      } catch (error) {
-        showError('An error occurred. Please try again.');
-      }
-    });
-  });
-  
+            password: password
+          }
+     );          
+if (response.status === 201) {
+    const responseData = response.data;
+    if (responseData.token) {
+        // Save the token and user data locally
+        localStorage.setItem('token', responseData.token);
+        localStorage.setItem('user', JSON.stringify(responseData.user));
+    }
+    // Registration successful, redirect to login page
+    window.location.href = '../index.html';
+}
+else {
+    if (response.data && response.data.error) {
+        showError(response.data.error);
+    } else {
+        showError('An error occurred during registration');
+    }
+}
+} catch (error) {
+if (error.response && error.response.data && error.response.data.error) {
+    showError(error.response.data.error);
+} else {
+    console.log(error.message);
+}
+}
+});
+});

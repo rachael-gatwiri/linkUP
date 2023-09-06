@@ -2,26 +2,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const emailInput = document.getElementById('email');
     const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    console.log(successMessage);
 
     form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         const email = emailInput.value;
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.color = 'red';
-        }
+       // Checking the error message
+       function showError(message) {
+        errorMessage.textContent = message;
+        successMessage.textContent = '';
+    }
+   
 
-        function showSuccess(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.color = 'green';
-        }
-
-        function removeMessage() {
-            errorMessage.textContent = '';
-        }
-
+    // Removing the error message
+    function removeError() {
+        errorMessage.textContent = '';
+        successMessage.textContent = '';
+    }
         function isValidEmail(email) {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailPattern.test(email);
@@ -35,52 +36,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isValidEmail(email)) {
             showError('Please enter a valid email address');
             return;
-        }
+        } 
 
-        removeMessage();
+        removeError();
 
         try {
-            const response = await fetch('your_backend_check_email_endpoint', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                }),
-            });
-
-            const responseData = await response.json();
+            const response = await axios.post(
+                'http://localhost:8005/users/forgotPassword',
+                {
+                    email: email
+                }
+            );
 
             if (response.status === 200) {
-                if (responseData.exists) {
-                    // Email exists in the database, send reset password link
-                    const resetResponse = await fetch('backend_reset_password_endpoint', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            email: email,
-                        }),
-                    });
-
-                    const resetData = await resetResponse.json();
-
-                    if (resetResponse.status === 200) {
-                        showSuccess('Reset password email sent to ' + email);
-                    } else {
-                        showError(resetData.message);
-                    }
-                } else {
-                    showError('Email does not exist');
-                }
+                successMessage.textContent = response.data.message;
+                
             } else {
-                // Handle error messages returned from the backend
-                showError(responseData.message);
+                if (response.data && response.data.error) {
+                    showError(response.data.error);
+                } else {
+                    showError('An error occurred. Please try again later.');
+                }
             }
         } catch (error) {
-            showError('An error occurred. Please try again.');
+            if ( error.response.data.error  ||  error.response.data || error.response ) {
+                showError(error.response.data.error);
+            } else {
+                console.error(error);
+            }
         }
     });
 });

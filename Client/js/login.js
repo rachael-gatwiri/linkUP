@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
       try {
         const response = await fetch(
-          'login-backend-endpoint',
+          'http://localhost:8005/users/login',
           {
             method: 'POST',
             headers: {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const responseData = await response.json();
   
         if (response.status === 200) {
-          window.location.href = '../index.html';
+          window.location.href = '/Client/htmlFiles/home.html';
         } else {
           if (responseData.error) {
             showError(responseData.error);
