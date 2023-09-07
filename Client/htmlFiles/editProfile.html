@@ -181,6 +181,8 @@
 <div id="postModal" class="fixed inset-0 flex items-center justify-center z-50 hidden ">
     <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto ">
+      <div id="successMessage" class="text-green-700 bg-green-300 text-center mt-2 mb-3"></div>
+      <div id="errorMessage" class="text-red-500 font-medium bg-red-100 mb-2 text-center mt-2"></div>
         <div class="modal-content py-4 text-left px-6 ">
             <!-- Modal title -->
             <div class="modal-header border-b border-gray-400">
@@ -194,7 +196,7 @@
             <span class="" id="closeModal"></span>
 
             <div class=" flex  space-x-11 items-center mt-4">
-                <img class="w-16 h-16 rounded-3xl" src="../Images/profiepic.jpeg" alt="">
+                <img class="w-16 h-16 rounded-3xl" src="https://i.imgur.com/6VBx3io.png" alt="">
                <span>
                 <input type="file" id="fileInput" class="hidden">
                 <label for="fileInput" class="cursor-pointer bg-gray-200 hover:bg-gray-300  text-secondary text-sm font-normal w-full py-2  px-11 rounded">
@@ -215,7 +217,7 @@
             <div class="modal-footer mt-4 flex justify-between">
 
                <div class=" space-x-2">
-              <button class=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded text-sm">
+              <button id="editProfileSaveBtn" class=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded text-sm">
                   save
               </button>
                </div>
@@ -253,6 +255,7 @@ fileInput.addEventListener('change', () => {
 });
 </script>
 
+<script src="../js/Posts/editProfile.js"></script>
    
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>

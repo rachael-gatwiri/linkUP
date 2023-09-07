@@ -1,15 +1,13 @@
--- Create a stored procedure to edit a comment
+-- Create a stored procedure to delete a comment
 USE Linkup
 GO
 
-DROP PROCEDURE IF EXISTS editCommentPROC;
+DROP PROCEDURE IF EXISTS deleteCommentPROC;
 GO
 
-CREATE PROCEDURE editCommentPROC
+CREATE PROCEDURE deleteCommentPROC
   @comment_id INT,
-  @user_id VARCHAR(255),
-  @content TEXT,
-  @comment_image_url VARCHAR(255)
+  @user_id VARCHAR(255)
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -24,13 +22,11 @@ BEGIN
   -- Check if the comment_id exists in the commentsTable and is owned by the user
   IF NOT EXISTS (SELECT 1 FROM commentsTable WHERE comment_id = @comment_id AND user_id = @user_id)
   BEGIN
-    RAISERROR('Comment not found or user does not own the comment.', 16, 1);
+    RAISERROR('Comment not found.', 16, 1);
     RETURN;
   END;
 
-  -- Update the comment in commentsTable
-  UPDATE commentsTable
-  SET content = @content,
-      comment_image_url = @comment_image_url
+  -- Delete the comment from commentsTable
+  DELETE FROM commentsTable
   WHERE comment_id = @comment_id;
 END;

@@ -28,7 +28,7 @@ BEGIN
   -- Check if the user is currently being followed by the follower_user
   IF NOT EXISTS (SELECT 1 FROM followersTable WHERE user_id = @user_id AND follower_user_id = @follower_user_id)
   BEGIN
-    RAISERROR('User is not being followed by the follower user.', 16, 1);
+    RAISERROR('User is not being followed by this user', 16, 1);
     RETURN;
   END;
 

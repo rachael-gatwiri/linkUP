@@ -1,4 +1,4 @@
--- Create a stored procedure to get a user's followers and following
+Z-- Create a stored procedure to get a user's followers and following
 USE Linkup
 GO
 

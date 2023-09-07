@@ -171,11 +171,9 @@ const resetPassword = async (req, res) => {
         // Verify the token and extract the email from it
         let email;
         try {
-            console.log('Received Token:', token);
             const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
             email = decodedToken.email;
         } catch (error) {
-            console.error(error); // Log the error
             return res.status(400).json({ error: 'Invalid or expired token. Please request a new password reset.' });
         }
 
@@ -197,7 +195,6 @@ const resetPassword = async (req, res) => {
             return res.status(400).json({ error: 'Password reset failed. Please request a new password reset.' });
         }
     } catch (error) {
-        console.error(error); 
         return res.status(500).json({ error: `Internal server error, ${error.message}` });
     }
 };
