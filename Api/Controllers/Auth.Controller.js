@@ -30,14 +30,9 @@ const userRegistration = async (req, res) => {
     try{
         const id = v4()
         const { firstName, lastName, username, email, password } = req.body
-        // console.log(firstName, lastName, username, email, password);
         if (!firstName || !lastName || !username|| !email || !password){
             return res.status(400).json({error: 'Please input all values'})
         }
-        // const { error } = registrationSchema.validate({ firstName, lastName, email, password })
-        // if(error){
-        //     return res.status(422).json({error: error.details})
-        // }
         const pool = await mssql.connect(sqlConfig)
         const checkEmailQuery = await pool
         .request()
@@ -74,12 +69,7 @@ const login = async (req, res) => {
         const { email, password } = req.body
         if(!req.body){
             return res.status(400).json({error: 'The request body can not be empty'})
-        }
-        // console.log(email, password);
-        // if(error){
-        //     return res.status(422).json({error: error.message})
-        // } 
-        else {
+        } else {
             // check if email is registered
             const pool = await mssql.connect(sqlConfig)
             const checkEmailQuery = await pool
@@ -123,27 +113,25 @@ const forgotPassword = async (req, res) => {
             return res.status(400).json({ error: 'Email not found' });
         }
         // Generate a dedicated reset token
-        const payload = { email: user.email }; // Replace with the relevant user data
-const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
-console.log('Generated Token:', token);
-        // const token = jwt.sign({email}, process.env.SECRET_KEY, {  expiresIn: 24*60*60 })
-                // Function to generate the reset password link
-function resetPasswordLink(token) {
-    // Replace with the actual URL of your reset password page
-    const resetPasswordUrl = `http://127.0.0.1:5501/Client/htmlFiles/resetPwd.html?token=${token}`;
-    return resetPasswordUrl;
-}
+        const payload = { email: user.email }; 
+        const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
+        function resetPasswordLink(token) {
+
+            // actual URL of reset password page
+            const resetPasswordUrl = `http://127.0.0.1:5501/Client/htmlFiles/resetPwd.html?token=${token}`;
+            return resetPasswordUrl;
+        }
 
         const pool = await mssql.connect(sqlConfig);
         await pool.request()
             .input('email', email)
-            .input('token', token) // Insert reset token into the database
-            .execute('genPwdResetTokenPROC'); // Create this stored procedure
+            .input('token', token)
+            .execute('genPwdResetTokenPROC'); 
 
         const transporter = nodemailer.createTransport({
             host: emailConfig.host,
             port: emailConfig.port,
-            secure: false, // Use TLS
+            secure: false, 
             auth: {
                 user: emailConfig.auth.user,
                 pass: emailConfig.auth.pass
@@ -154,7 +142,7 @@ function resetPasswordLink(token) {
             from: emailConfig.auth.user, // Sender email address
             to: email, // Recipient email address
             subject: 'Linkup Password Reset', // Email subject
-            html: `<p>Hi ${user.first_name},</p>
+            html: `<h1>Hi ${user.first_name},</h1>
             <p>Please click on the link below to reset your password:</p>
             <a href="${resetPasswordLink(token)}">Reset Password</a>`, // Email content as HTML
         };
@@ -186,8 +174,6 @@ const resetPassword = async (req, res) => {
             console.log('Received Token:', token);
             const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
             email = decodedToken.email;
-            
-            // Continue with password reset logic here
         } catch (error) {
             console.error(error); // Log the error
             return res.status(400).json({ error: 'Invalid or expired token. Please request a new password reset.' });

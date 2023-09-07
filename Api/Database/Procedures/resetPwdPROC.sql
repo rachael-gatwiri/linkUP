@@ -1,12 +1,12 @@
 USE Linkup
 GO
 
-DROP PROCEDURE IF EXISTS resetPwdPROC
-GO
+-- DROP PROCEDURE IF EXISTS resetPwdPROC
+-- GO
 
 CREATE PROCEDURE resetPwdPROC
     @email VARCHAR(255),
-    @token VARCHAR(500),
+    @token VARCHAR(MAX),
     @newPassword VARCHAR(255)
 AS
 BEGIN

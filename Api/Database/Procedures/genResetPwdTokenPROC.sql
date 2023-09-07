@@ -6,17 +6,13 @@ GO
 
 CREATE PROCEDURE genPwdResetTokenPROC
     @email VARCHAR(255),
-    @token VARCHAR(500) OUTPUT
+    @token VARCHAR(MAX) OUTPUT
 AS
 BEGIN
-    DECLARE @newToken VARCHAR(500);
-    SET @newToken = CONVERT(VARCHAR(500), NEWID()); -- Generate a random token
-
-    -- Update the user's token in the database
     UPDATE usersTable
-    SET token = @newToken
+    SET token = @token
     WHERE email = @email;
 
-    SET @token = @newToken;
+    SET @token = @token;
 END;
 
