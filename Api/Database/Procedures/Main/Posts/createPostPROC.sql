@@ -2,16 +2,16 @@
 USE Linkup
 GO
 
-DROP PROCEDURE IF EXISTS CreateNewPostPROC;
-GO
+-- DROP PROCEDURE IF EXISTS CreateNewPostPROC;
+-- GO
 
-CREATE PROCEDURE CreateNewPostPROC
+CREATE OR ALTER PROCEDURE CreateNewPostPROC
   @user_id VARCHAR(255),
   @content TEXT,
   @post_image_url VARCHAR(255)
 AS
 BEGIN
-  SET NOCOUNT ON;
+  -- SET NOCOUNT ON;
 
   -- Check if the user_id exists in the usersTable (foreign key constraint check)
   IF NOT EXISTS (SELECT 1 FROM usersTable WHERE id = @user_id)

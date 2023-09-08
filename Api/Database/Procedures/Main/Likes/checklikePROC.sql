@@ -1,11 +1,11 @@
--- Create a stored procedure to unlike a post
-USE Linkup;
+-- Create a stored procedure to check if a user has liked a post
+USE Linkup
 GO
 
-DROP PROCEDURE IF EXISTS UnlikePostPROC;
+DROP PROCEDURE IF EXISTS CheckLikeProc;
 GO
 
-CREATE PROCEDURE UnlikePostPROC
+CREATE PROCEDURE CheckLikeProc
   @user_id VARCHAR(255),
   @post_id INT
 AS
@@ -26,13 +26,15 @@ BEGIN
     RETURN;
   END;
 
-  -- -- Check if the user has already unliked the post
-  IF NOT EXISTS (SELECT 1 FROM likesTable WHERE user_id = @user_id AND post_id = @post_id)
+  -- Check if the user has liked the post
+  IF EXISTS (SELECT 1 FROM likesTable WHERE user_id = @user_id AND post_id = @post_id)
   BEGIN
-    RAISERROR('User has not liked the post.', 16, 1);
-    RETURN;
+    -- User has liked the post
+    SELECT 1 AS is_liked;
+  END
+  ELSE
+  BEGIN
+    -- User has not liked the post
+    SELECT 0 AS is_liked;
   END;
-
-  -- Delete the like from likesTable
-  DELETE FROM likesTable WHERE user_id = @user_id AND post_id = @post_id;
 END;

@@ -6,7 +6,7 @@ const { sqlConfig } = require('../Config/config');
 const createPost = async (req, res) => {
   try {
     const { userId, content, postImage } = req.body;
-    console.log(error.message);
+    // console.log(error.message);
 
     if (!userId || !content) {
       return res.status(400).json({ error: 'User ID and post content are required' });
@@ -22,7 +22,7 @@ const createPost = async (req, res) => {
       .execute('CreateNewPostPROC');
 
     // Check if the post was successfully created
-    if (result.rowsAffected[0] === 1) {
+    if (result.rowsAffected[0] == 1) {
       return res.status(201).json({ message: 'Post created successfully' });
     } else {
       return res.status(500).json({ error: 'Failed to create the post' });
@@ -39,13 +39,25 @@ const getPostsByUser = async (req, res) => {
     const userId = req.params.userId;
 
     const pool = await mssql.connect(sqlConfig);
-
     // Fetch posts by user ID from the database
     const result = await pool.request()
-      .input('userId', mssql.VarChar, userId)
-      .execute('getPostsByUserProc');
-
+      .input('user_id', mssql.VarChar, userId)
+      .execute('getUserPostsPROC');
+  
     // Return the fetched posts
+    return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'User not Found' });
+  }
+};
+
+// Get all posts
+const getAllPosts = async (req, res) => {
+  try {
+    const pool = await mssql.connect(sqlConfig);
+    const result = await pool.request().execute('GetAllPostsProc');
+
     return res.status(200).json(result.recordset);
   } catch (error) {
     console.error(error);
@@ -67,11 +79,11 @@ const editPost = async (req, res) => {
   
       // Update the post in the database
       const result = await pool.request()
-        .input('userId', mssql.VarChar, userId)
-        .input('postId', mssql.Int, postId)
+        .input('user_id', mssql.VarChar, userId)
+        .input('post_id', mssql.Int, postId)
         .input('content', mssql.Text, content)
-        .input('postImage', mssql.VarChar, postImage || null) // Optional post image
-        .execute('editPostProc');
+        .input('post_image_url', mssql.VarChar, postImage || null) // Optional post image
+        .execute('editPostPROC');
   
       // Check if the post was successfully updated
       if (result.rowsAffected[0] === 1) {
@@ -89,8 +101,8 @@ const editPost = async (req, res) => {
 // Delete a post
 const deletePost = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const postId = req.params.postId;
+    const { userId, postId } = req.body;
+    // const postId = req.params.postId;
 
     if (!userId || !postId) {
       return res.status(400).json({ error: 'User ID and post ID are required' });
@@ -100,9 +112,9 @@ const deletePost = async (req, res) => {
 
     // Delete the post from the database
     const result = await pool.request()
-      .input('userId', mssql.VarChar, userId)
-      .input('postId', mssql.Int, postId)
-      .execute('deletePostProc');
+      .input('user_id', mssql.VarChar, userId)
+      .input('post_id', mssql.Int, postId)
+      .execute('deletePostPROC');
 
     // Check if the post was successfully deleted
     if (result.rowsAffected[0] === 1) {
@@ -112,13 +124,14 @@ const deletePost = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Post not found' });
   }
 };
 
 module.exports = {
     createPost,
     getPostsByUser,
+    getAllPosts,
     editPost,
     deletePost
 }

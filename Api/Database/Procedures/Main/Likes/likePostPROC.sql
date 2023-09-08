@@ -1,6 +1,6 @@
 -- Create a stored procedure to like a post
-USE Linkup
-GO  
+USE Linkup;
+GO
 
 DROP PROCEDURE IF EXISTS LikePostPROC;
 GO
@@ -26,12 +26,13 @@ BEGIN
     RETURN;
   END;
 
-  -- Check if the user has already liked the post
-  IF EXISTS (SELECT 1 FROM likesTable WHERE user_id = @user_id AND post_id = @post_id)
-  BEGIN
-    RAISERROR('User has already liked the post.', 16, 1);
-    RETURN;
-  END;
+--   -- Check if the user has already liked the post
+IF EXISTS (SELECT 1 FROM likesTable WHERE user_id = @user_id AND post_id = @post_id)
+BEGIN
+  RAISERROR('User has already liked the post.', 16, 1);
+  RETURN;
+END;
+
 
   -- Insert the like into likesTable
   INSERT INTO likesTable (user_id, post_id)

@@ -3,10 +3,10 @@ const router = Router()
 const {verifyToken} = require('../Middlewares/verifytoken')
 const {getUserByEmail, userRegistration, login, forgotPassword, resetPassword} = require('../Controllers/Auth.Controller')
 const {getUserProfile, updateUserProfile} = require('../Controllers/userProfile.Controller')
-const {createPost, getPostsByUser, editPost, deletePost} = require('../Controllers/Posts.Controller')
-const {getAllLikes, likePost, unlikePost} = require('../Controllers/Like.Controller')
-const {getCommentsByPost, addComment, editComment, deleteComment} = require('../Controllers/Comments.Controller')
-const {followUser, unfollowUser, getUserFollowers, getUserFollowing} = require('../Controllers/Follow.Controller')
+const {createPost, getPostsByUser, getAllPosts, editPost, deletePost} = require('../Controllers/Posts.Controller')
+const {likePost,getLikesByPost, unlikePost} = require('../Controllers/Like.Controller')
+const { addComment, getCommentsByPost, editComment, deleteComment} = require('../Controllers/Comments.Controller')
+const {followUser, getUserFollowers, getUserFollowing, unfollowUser,} = require('../Controllers/Follow.Controller')
 
 
 //Auntentication routes
@@ -24,25 +24,26 @@ router.put('/updateUserProfile/:userId', updateUserProfile)
 //Posts routes
 router.post('/createPost', createPost)
 router.get('/getPostsByUser/:userId', getPostsByUser)
+router.get('/getAllPosts', getAllPosts)
 router.put('/editPost/:postId', editPost)
-router.delete('/deletePost/:postId', deletePost)
+router.delete('/deletePost', deletePost)
 
 //Like and unlike routes
-router.post('/likePost/:postId', likePost)
-router.get('/getAllLikes', getAllLikes)
-router.delete('/unlikePost/:postId', unlikePost)
+router.post('/likePost', likePost)
+router.get('/getLikesByPost/:postId', getLikesByPost)
+router.delete('/unlikePost', unlikePost)
 
 //comments routes
-router.get('/getCommentsByPost/:postId', getCommentsByPost)
 router.post('/addComment', addComment)
+router.get('/getCommentsByPost/:postId', getCommentsByPost)
 router.put('/editComment/:commentId', editComment)
 router.delete('/deleteComment/:commentId', deleteComment)
 
 //Follow and unfollow routes
 router.post('/followUser', followUser)
-router.delete('/unfollowUser', unfollowUser)
 router.get('/getUserFollowers/:userId', getUserFollowers)
 router.get('/getUserFollowing/:userId', getUserFollowing)
+router.delete('/unfollowUser', unfollowUser)
 
 
 module.exports = router
