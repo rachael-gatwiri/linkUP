@@ -1,90 +1,86 @@
-const express = require('express');
 const mssql = require('mssql');
 const { sqlConfig } = require('../Config/config');
 
-// Like a post
-const likePost = async (req, res) => {
+// Controller for adding a like to a post
+const addLikeToPost = async (req, res) => {
   try {
-    const { userId, postId} = req.body;
-    // console.log(error.message);
-
-    if (!userId || !postId) {
-      return res.status(400).json({ error: 'User ID and post ID are required' });
-    }
+    const { user_id, post_id } = req.body;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Insert the new post into the database
+    // Call the modified stored procedure to add a like to the post
     const result = await pool.request()
-    .input('user_id', mssql.VarChar, userId)
-    .input('post_id', mssql.Int, postId)
-      .execute('likePostPROC');
+      .input('user_id', mssql.VarChar, user_id)
+      .input('post_id', mssql.Int, post_id)
+      .execute('AddLikeToPostProc');
 
-    // Check if the post was successfully created
-    if (result.rowsAffected[0] === 1) {
-      return res.status(201).json({ message: 'Post liked successfully' });
+    // Check the message returned by the stored procedure
+    const message = result.recordset[0].message;
+
+    if (message === 'Like added successfully') {
+      return res.status(200).json({ message: 'Post liked successfully' });
     } else {
-      return res.status(500).json({ error: 'User had already liked this post' });
+      return res.status(400).json({ error: 'User has already liked the post' });
     }
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-// Get likes by post ID
-const getLikesByPost = async (req, res) => {
-  const postId = req.params.postId;
 
+
+// Controller for removing a like from a post
+const removeLikeFromPost = async (req, res) => {
   try {
-    const pool = await mssql.connect(sqlConfig);
-    const result = await pool
-      .request()
-      .input('post_id', mssql.Int, postId)
-      .execute('GetLikesByPostProc');
+    const { user_id, post_id } = req.body;
 
-    return res.status(200).json(result.recordset);
+    const pool = await mssql.connect(sqlConfig);
+
+    // Call the stored procedure to remove the like from the post
+    const result = await pool.request()
+      .input('user_id', mssql.VarChar, user_id)
+      .input('post_id', mssql.Int, post_id)
+      .execute('RemoveLikeFromPostProc');
+
+    // Check the message returned by the stored procedure
+    const message = result.recordset[0].message;
+
+    if (message === 'Like removed successfully') {
+      return res.status(200).json({ message: 'Post unliked successfully' });
+    } else {
+      return res.status(400).json({ error: 'User has not liked the post' });
+    }
   } catch (error) {
-    // console.error(error);
-    return res.status(500).json({ error: 'Internal Server error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Unlike a post
-const unlikePost = async (req, res) => {
-  try {
-    const { userId, postId } = req.body;
-    // const postId = req.params.postId;
 
-    if (!userId || !postId) {
-      return res.status(400).json({ error: 'User ID and post ID are required' });
-    }
+// Controller for getting all likes for a post
+const getLikesForPost = async (req, res) => {
+  try {
+    const { post_id } = req.params;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Delete the post from the database
+    // Call the stored procedure to get all likes for the post
     const result = await pool.request()
-      .input('user_id', mssql.VarChar, userId)
-      .input('post_id', mssql.Int, postId)
-      .execute('unlikePostPROC');
+      .input('post_id', mssql.Int, post_id)
+      .execute('GetLikesForPostProc');
 
-    // Check if the post was successfully deleted
-    if (result.rowsAffected[0] === 1) {
-      return res.status(200).json({ message: 'Post unliked successfully' });
-    } else {
-      return res.status(500).json({ error: 'User has not liked the post.' });
-    }
+    // Extract the list of user IDs from the result
+    const likes = result.recordset.map((record) => record.user_id);
+
+    return res.status(200).json(likes);
   } catch (error) {
-    // console.error(error);
-    return res.status(500).json({ error: 'Internal Server error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 module.exports = {
-  likePost,
-  getLikesByPost,
-  unlikePost
+  addLikeToPost,
+  removeLikeFromPost,
+  getLikesForPost,
 };
-
-
-
-

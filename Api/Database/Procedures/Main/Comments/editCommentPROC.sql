@@ -1,36 +1,23 @@
--- Create a stored procedure to edit a comment
-USE Linkup
+USE Linkup;
 GO
 
-DROP PROCEDURE IF EXISTS editCommentPROC;
-GO
+-- DROP PROCEDURE IF EXISTS EditCommentProc;
+-- GO
 
-CREATE PROCEDURE editCommentPROC
+CREATE OR ALTER PROCEDURE EditCommentProc
   @comment_id INT,
   @user_id VARCHAR(255),
-  @content TEXT,
-  @comment_image_url VARCHAR(255)
+  @new_comment_text TEXT
 AS
 BEGIN
-  SET NOCOUNT ON;
-
-  -- Check if the user_id exists in the usersTable (foreign key constraint check)
-  IF NOT EXISTS (SELECT 1 FROM usersTable WHERE id = @user_id)
+  -- Check if the user is the owner of the comment
+  IF EXISTS (SELECT 1 FROM commentsTable WHERE comment_id = @comment_id AND user_id = @user_id)
   BEGIN
-    RAISERROR('User not found.', 16, 1);
-    RETURN;
+    -- Update the comment text if the user is the owner
+    UPDATE commentsTable
+    SET comment_text = @new_comment_text
+    WHERE comment_id = @comment_id OR parent_comment_id = @comment_id;
   END;
-
-  -- Check if the comment_id exists in the commentsTable and is owned by the user
-  IF NOT EXISTS (SELECT 1 FROM commentsTable WHERE comment_id = @comment_id AND user_id = @user_id)
-  BEGIN
-    RAISERROR('Comment not found', 16, 1);
-    RETURN;
-  END;
-
-  -- Update the comment in commentsTable
-  UPDATE commentsTable
-  SET content = @content,
-      comment_image_url = @comment_image_url
-  WHERE comment_id = @comment_id;
+  -- Optionally, you can return a success message or error message as needed
 END;
+

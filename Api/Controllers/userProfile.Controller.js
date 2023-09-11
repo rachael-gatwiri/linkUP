@@ -16,7 +16,7 @@ const getUserProfile = async (req, res) => {
 
     const userProfile = result.recordset[0]; // Access the first record
 
-    console.log('User Profile:', userProfile);
+    // console.log('User Profile:', userProfile);
 
     if (!userProfile) {
       return res.status(404).json({ message: 'User not found' });

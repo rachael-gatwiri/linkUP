@@ -2,113 +2,125 @@ const express = require('express');
 const mssql = require('mssql');
 const { sqlConfig } = require('../Config/config');
 
-// Fetch all comments for a specific post
-const getCommentsByPost = async (req, res) => {
-    const postId = req.params.postId;
-
-    if (!postId) {
-        return res.status(400).json({ error: 'Post ID is required' });
-    }
-
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const result = await pool.request()
-            .input('postId', mssql.Int, postId)
-            .execute('GetCommentsByPostPROC');
-
-        const comments = result.recordset;
-
-        return res.status(200).json(comments);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-}
-
-// Add a comment to a post or another comment
+// Add a Comment
 const addComment = async (req, res) => {
-    const { userId, postId, parentCommentId, content } = req.body;
+  try {
+    const { user_id, post_id, parent_comment_id, comment_text } = req.body;
 
-    if (!userId || !postId || !content) {
-        return res.status(400).json({ error: 'User ID, Post ID, and Content are required' });
-    }
+    const pool = await mssql.connect(sqlConfig);
 
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const result = await pool.request()
-            .input('userId', mssql.VarChar, userId)
-            .input('postId', mssql.Int, postId)
-            .input('parentCommentId', mssql.Int, parentCommentId)
-            .input('content', mssql.Text, content)
-            .execute('AddCommentPROC');
+    // Call the stored procedure to add a comment
+    await pool.request()
+      .input('user_id', mssql.VarChar, user_id)
+      .input('post_id', mssql.Int, post_id)
+      .input('parent_comment_id', mssql.Int, parent_comment_id || null)
+      .input('comment_text', mssql.Text, comment_text)
+      .execute('AddCommentOrReplyProc');
+    return res.status(201).json({ message: 'Comment added successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+  
+// Get Comments by Post
+const getCommentsByPost = async (req, res) => {
+  try {
+    const { post_id } = req.params;
 
-        if (result.rowsAffected[0] === 1) {
-            return res.status(201).json({ message: 'Comment added successfully' });
-        } else {
-            return res.status(500).json({ error: 'Failed to add the comment' });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-}
+    const pool = await mssql.connect(sqlConfig);
 
-// Edit a user's comment
+    // Call the stored procedure to get comments by post
+    const result = await pool.request()
+      .input('post_id', mssql.Int, post_id)
+      .execute('GetCommentsByPostProc');
+
+    return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Get Comments by Comment (Replies)
+const getCommentsByComment = async (req, res) => {
+  try {
+    const { comment_id } = req.params;
+
+    const pool = await mssql.connect(sqlConfig);
+
+    // Call the stored procedure to get comments by comment
+    const result = await pool.request()
+      .input('comment_id', mssql.Int, comment_id)
+      .execute('GetParentCommentsByCommentProc');
+
+    return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+  
+
+// Edit a Comment
 const editComment = async (req, res) => {
-    const { userId, commentId, content } = req.body;
+  try {
+    const { comment_id, user_id, new_comment_text } = req.body;
 
-    if (!userId || !commentId || !content) {
-        return res.status(400).json({ error: 'User ID, Comment ID, and Content are required' });
+    const pool = await mssql.connect(sqlConfig);
+
+    // Call the stored procedure to edit the comment
+   const result = await pool.request()
+      .input('comment_id', mssql.Int, comment_id)
+      .input('user_id', mssql.VarChar, user_id)
+      .input('new_comment_text', mssql.Text, new_comment_text)
+      .execute('EditCommentProc');
+
+    // Check if any rows were affected by the update
+    if (result.rowsAffected[0] === 1) {
+      return res.status(200).json({ message: 'Comment edited successfully' });
+    } else {
+      return res.status(404).json({ error: 'Comment not found or you do not have permission to edit it' });
     }
-
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const result = await pool.request()
-            .input('userId', mssql.VarChar, userId)
-            .input('commentId', mssql.Int, commentId)
-            .input('content', mssql.Text, content)
-            .execute('EditCommentPROC');
-
-        if (result.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Comment edited successfully' });
-        } else {
-            return res.status(500).json({ error: 'Failed to edit the comment' });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-}
-
-// Delete a user's comment
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+// Delete a Comment (including its child comments)
 const deleteComment = async (req, res) => {
-    const { userId, commentId } = req.body;
+  try {
+    const { comment_id, user_id } = req.body;
 
-    if (!userId || !commentId) {
-        return res.status(400).json({ error: 'User ID and Comment ID are required' });
+    const pool = await mssql.connect(sqlConfig);
+
+    // Call the stored procedure to delete the comment and its child comments
+    const result = await pool.request()
+      .input('comment_id', mssql.Int, comment_id)
+      .input('user_id', mssql.VarChar, user_id)
+      .execute('DeleteCommentProc');
+
+   if (result.rowsAffected[0] > 0) {
+      return res.status(200).json({ message: 'Comment deleted successfully' });
+    } else if (result.rowsAffected[0] === 1) {
+      return res.status(404).json({ error: 'Comment not found or you do not have permission to delete it' });
+    } else {
+      // Handle unexpected return values, if any
+      return res.status(500).json({ error: 'Comment not found or you do not have permission to delete it' });
     }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const result = await pool.request()
-            .input('userId', mssql.VarChar, userId)
-            .input('commentId', mssql.Int, commentId)
-            .execute('DeleteCommentPROC');
 
-        if (result.rowsAffected[0] === 1) {
-            return res.status(200).json({ message: 'Comment deleted successfully' });
-        } else {
-            return res.status(500).json({ error: 'Failed to delete the comment' });
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-}
+
 
 module.exports = {
+   addComment,
     getCommentsByPost,
-    addComment,
+    getCommentsByComment,
     editComment,
-    deleteComment
+   deleteComment
 }

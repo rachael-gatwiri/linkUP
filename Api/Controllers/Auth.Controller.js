@@ -13,19 +13,6 @@ const nodemailer = require('nodemailer');
 const { emailConfig } = require('../Config/emailConfig'); // Import your email configuration
 // const { registrationSchema, loginSchema } = require('../Validators/Auth.validators')
 
-const getUserByEmail = async (email) => {
-    try {
-        const pool = await mssql.connect(sqlConfig);
-        const result = await pool.request()
-            .input('email', email)
-            .execute('fetchUserByEmailPROC');
-        
-        return result.recordset[0]; // Return user object or null if not found
-    } catch (error) {
-        throw error;
-    }
-};
-
 const userRegistration = async (req, res) => {
     try{
         const id = v4()
@@ -97,6 +84,38 @@ const login = async (req, res) => {
         return res.status(500).json({error: `Internal server error, ${error.message}`})
     }
 }
+
+const getUserByEmail = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const pool = await mssql.connect(sqlConfig);
+        const result = await pool.request()
+            .input('email', email)
+            .execute('fetchUserByEmailPROC');
+        
+    return res.status(200).json(result.recordset[0]);
+    }catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Get All Users
+const getAllUsers = async (req, res) => {
+    try {
+      const pool = await mssql.connect(sqlConfig);
+  
+      // Fetch all users from the database
+      const result = await pool.request()
+       .execute('GetAllUsersProc')
+  
+      return res.status(200).json(result.recordset);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 // POST /users/forgot-password
 const forgotPassword = async (req, res) => {
@@ -199,14 +218,11 @@ const resetPassword = async (req, res) => {
     }
 };
 
-
-
-  
-
 module.exports = {
-    getUserByEmail,
     userRegistration,
     login,
+    getUserByEmail,
+    getAllUsers,
     forgotPassword,
     resetPassword
 } 

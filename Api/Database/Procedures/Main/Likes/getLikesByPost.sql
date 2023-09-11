@@ -1,23 +1,15 @@
--- Create a stored procedure to get likes by post ID
 USE Linkup;
 GO
 
-DROP PROCEDURE IF EXISTS GetLikesByPostProc;
-GO
+-- DROP PROCEDURE IF EXISTS GetLikesForPostProc;
+-- GO
 
-CREATE PROCEDURE GetLikesByPostProc
+CREATE OR ALTER PROCEDURE GetLikesForPostProc
   @post_id INT
 AS
 BEGIN
-  SET NOCOUNT ON;
-
-  -- Check if the post_id exists in the postsTable (foreign key constraint check)
-  IF NOT EXISTS (SELECT 1 FROM postsTable WHERE post_id = @post_id)
-  BEGIN
-    RAISERROR('Post not found.', 16, 1);
-    RETURN;
-  END;
-
-  -- Retrieve likes by post_id from likesTable
-  SELECT * FROM likesTable WHERE post_id = @post_id;
+  -- Retrieve all likes for the specified post
+  SELECT user_id
+  FROM likesTable
+  WHERE post_id = @post_id;
 END;

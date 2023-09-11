@@ -1,94 +1,117 @@
-const express = require('express');
 const mssql = require('mssql');
 const { sqlConfig } = require('../Config/config');
 
-// Follow a user
+// Follow a User
 const followUser = async (req, res) => {
-    const { followerUserId, followeeUserId } = req.body;
-
-    if (!followerUserId || !followeeUserId) {
-      return res.status(400).json({ error: 'Follower user ID and followee user ID are required' });
-    }
+  try {
+    const { follower_id, following_id } = req.body;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Insert a follow relationship into the database
-    const result = await pool.request()
-      .input('followerUserId', mssql.VarChar, followerUserId)
-      .input('followeeUserId', mssql.VarChar, followeeUserId)
-      .execute('followUserProc');
-
-    // Check if the follow relationship was successfully added
-    if (result.rowsAffected[0] === 1) {
-      return res.status(200).json({ message: 'User followed successfully' });
-    } else {
-      return res.status(500).json({ error: 'Failed to follow the user' });
-    } 
+    // Check if the relationship already exists to avoid duplicates
+    const existingRelationship = await pool.request()
+    .input('follower_id', mssql.VarChar, follower_id)
+    .input('following_id', mssql.VarChar, following_id)
+    .query('SELECT 1 FROM FollowersTable WHERE follower_id = @follower_id AND following_id = @following_id');
+  
+  if (existingRelationship.rowsAffected[0] === 0) {
+    // Insert the relationship if it doesn't exist
+    await pool.request()
+      .input('follower_id', mssql.VarChar, follower_id)
+      .input('following_id', mssql.VarChar, following_id)
+      .execute('followUserPROC');
+    return res.status(200).json({ message: 'User followed successfully' });
+  } else {
+    // Handle the case where the relationship already exists
+    return res.status(400).json({ error: 'User is already followed' });
+  } 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
-// Unfollow a user
+
+
+// Unfollow a User
 const unfollowUser = async (req, res) => {
-    const { followerUserId, followeeUserId } = req.body;
-
-    if (!followerUserId || !followeeUserId) {
-        return res.status(400).json({ error: 'Follower user ID and followee user ID are required' });
-    }
+  try {
+    const { follower_id, following_id } = req.body;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Delete a follow relationship from the database
-    const result = await pool.request()
-        .input('followerUserId', mssql.VarChar, followerUserId)
-        .input('followeeUserId', mssql.VarChar, followeeUserId)
-        .execute('unfollowUserProc');
-        
-    // Check if the follow relationship was successfully deleted
-    if (result.rowsAffected[0] === 1) {
-        return res.status(200).json({ message: 'User unfollowed successfully' });
-    } else {
-        return res.status(500).json({ error: 'Failed to unfollow the user' });
+    if (follower_id === following_id) {
+      return res.status(400).json({ error: 'You cannot unfollow yourself' });
     }
+
+    // Check if the relationship exists to avoid errors
+    const existingRelationship = await pool.request()
+      .input('follower_id', mssql.VarChar, follower_id)
+      .input('following_id', mssql.VarChar, following_id)
+      .query('SELECT 1 FROM FollowersTable WHERE follower_id = @follower_id AND following_id = @following_id');
+
+  if (existingRelationship.rowsAffected[0] !== 0) {
+    // Delete the relationship if it exists
+    await pool.request()
+      .input('follower_id', mssql.VarChar, follower_id)
+      .input('following_id', mssql.VarChar, following_id)
+      .execute('UnfollowUserPROC')
+    return res.status(200).json({ message: 'User unfollowed successfully' });
+  } else {
+    // Handle the case where the relationship doesn't exist
+    return res.status(400).json({ error: 'User is not followed' });
+  } 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
-// Get user followers
-const getUserFollowers = async (req, res) => {
-    const userId = req.params.userId;
+ 
 
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
+
+// Get Followers of a User
+const getFollowers = async (req, res) => {
+  try {
+    const { user_id } = req.params;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Fetch all followers for the specified user
+    // Retrieve the list of users who are following the specified user
     const result = await pool.request()
-      .input('userId', mssql.VarChar, userId)
-      .execute('getUserFollowersProc');
-
+      .input('user_id', mssql.VARCHAR(255), user_id)
+      .execute('GetFollowersPROC')
     return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
-// Get users the user is following
-const getUserFollowing = async (req, res) => {
-    const userId = req.params.userId;
 
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
+
+// Get Users Followed by a User
+const getFollowing = async (req, res) => {
+  try {
+    const { user_id } = req.params;
 
     const pool = await mssql.connect(sqlConfig);
 
-    // Fetch all users that the specified user is following
+    // Retrieve the list of users followed by the specified user
     const result = await pool.request()
-      .input('userId', mssql.VarChar, userId)
-      .execute('getUserFollowingProc');
+      .input('user_id', mssql.VarChar, user_id)
+      .execute('GetFollowingPROC')
 
     return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 module.exports = {
-    followUser,
-    unfollowUser,
-    getUserFollowers,
-    getUserFollowing
+  followUser,
+  unfollowUser,
+  getFollowers,
+  getFollowing,
 };
