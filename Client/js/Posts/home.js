@@ -169,8 +169,6 @@ function createPostElement(post) {
     updateFollowButtonUI(isFollowing);
   });
 
-  
-
   //create a container for userinfodiv and followstatus
   const userInfoFollowContainer = document.createElement('div');
   userInfoFollowContainer.classList.add('flex', 'justify-between', 'items-center', 'mb-1');
@@ -235,17 +233,26 @@ likeIcon.src = '../Images/unlike.png';
 likeIcon.alt = 'Like Icon';
 likeLink.id = 'likeLink';
 
+const likeCount = document.createElement('span');
+likeCount.classList.add('text-sm', 'ml-1');
+likeCount.id = 'likeCount';
+
 let isLiked = false;
+let likesTotal = 0;
 const apiUrlIsLiked = `http://localhost:8005/users/getLikesForPost/${post.post_id}`;
 axios.get(apiUrlIsLiked)
 .then(response => {
   //loop through the followers and check if the user is following
   response.data.forEach(like => {
+    likesTotal++;
     if(like === userId){
       likeIcon.src = '../Images/likeIcon.png';
       isLiked = true;
     }
   });
+})
+.finally(() => { 
+  likeCount.textContent = likesTotal; 
 })
 .catch(error => {
   console.error('Error checking if user is following:', error);
@@ -269,12 +276,6 @@ likeLink.addEventListener('click', () => {
 })
 
 likeLink.appendChild(likeIcon);
-
-const likeCount = document.createElement('span');
-likeCount.classList.add('text-sm', 'ml-1');
-likeCount.textContent = post.like_count;; 
-likeCount.id = 'likeCount';
-
 likeCountContainer.appendChild(likeLink);
 likeCountContainer.appendChild(likeCount);
 
@@ -298,7 +299,8 @@ commentCount.classList.add('text-sm', 'ml-1');
 commentCount.textContent = post.comment_count;
 commentCount.id = 'commentCount';
 
-// ontainer for the "View all Comments" link
+
+// container for the "View all Comments" link
 const viewAllCommentsContainer = document.createElement('div');
 viewAllCommentsContainer.classList.add('flex-col');
 viewAllCommentsContainer.id = 'viewAllCommentsContainer'; 
@@ -325,6 +327,21 @@ addCommentButton.name = 'add Comment';
 addCommentButton.id = 'postComment';
 addCommentButton.textContent = 'Post comment';
 
+
+let commentTotal = 0;
+
+const apiUrlIsCommented = `http://localhost:8005/users/getCommentsByPost/${post.post_id}`;
+axios.get(apiUrlIsCommented)
+.then(response => {
+  //loop through the followers and check if the user is following
+  response.data.forEach(comment => {
+    commentTotal++;
+  });
+})
+.finally(() => {
+  commentCount.textContent = commentTotal; 
+})
+
 addCommentButton.addEventListener('click', () => {
   const commentText = addCommentTextarea.value.trim();
   if (commentText) {
@@ -337,9 +354,6 @@ addCommentButton.addEventListener('click', () => {
     successMessage.textContent = '';
   } , 2000);
 });
-
-
-
 
 // Get the error and success message elements
 const errorMessage= document.createElement('p');

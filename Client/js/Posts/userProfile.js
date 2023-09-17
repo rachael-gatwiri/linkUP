@@ -127,80 +127,146 @@ userUsername.id = 'userUsername';
     userProfileImg.alt = 'Profile Picture';
     userProfileName.textContent = userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : '';
     userProfileUsername.textContent = userProfile ? userProfile.username : '';
-
-  // container for like and comment counts
-const likeCommentContainer = document.createElement('div');
-likeCommentContainer.classList.add('post', 'flex',  'mt-4', 'mb-2');
-likeCommentContainer.id = 'likeCommentContainer';
-
-// container for like count
-const likeCountContainer = document.createElement('span');
-likeCountContainer.classList.add('flex', 'pr-6');
-likeCountContainer.id = 'likeCountContainer'; 
-
-const likeLink = document.createElement('a');
-likeLink.href = ''; // Add the correct URL for liking
-const likeIcon = document.createElement('img');
-likeIcon.classList.add('w-5', 'h-5');
-likeIcon.src = '../Images/likeIcon.png';
-likeIcon.alt = 'Like Icon';
-likeLink.id = 'likeLink';
-likeLink.appendChild(likeIcon);
-
-const likeCount = document.createElement('span');
-likeCount.classList.add('text-sm', 'ml-1');
-likeCount.textContent = post.like_count;; 
-likeCount.id = 'likeCount';
-
-likeCountContainer.appendChild(likeLink);
-likeCountContainer.appendChild(likeCount);
-
-//container for comment count
-const commentCountContainer = document.createElement('span');
-commentCountContainer.classList.add('flex');
-commentCountContainer.id = 'commentCountContainer';
-
-const commentLink = document.createElement('a');
-commentLink.href = ''; // Add the correct URL for commenting
-const commentIcon = document.createElement('img');
-commentIcon.classList.add('w-5', 'h-5');
-commentIcon.src = '../Images/comment.png';
-commentIcon.alt = 'Comment Icon';
-commentLink.id = 'commentLink';
-commentLink.appendChild(commentIcon);
-
-const commentCount = document.createElement('span');
-commentCount.classList.add('text-sm', 'ml-1');
-commentCount.textContent = post.comment_count;
-commentCount.id = 'commentCount';
-
-// container for the "View all Comments" link
-const viewAllCommentsContainer = document.createElement('div');
-viewAllCommentsContainer.classList.add('flex-col',);
-viewAllCommentsContainer.id = 'viewAllCommentsContainer'; 
-
-// "View all Comments" link
-const viewAllCommentsLink = document.createElement('a');
-viewAllCommentsLink.classList.add('text-sm', 'text-gray-600', 'hover:text-gray-400');
-viewAllCommentsLink.href = `../htmlFiles/userComment.html?postId=${post.id}`;
-viewAllCommentsLink.textContent = 'View all Comments';
-viewAllCommentsLink.id = 'viewAllCommentsLink';
-
-// textarea for adding comments
-const addCommentTextarea = document.createElement('textarea');
-addCommentTextarea.classList.add('mt-6', 'text-sm', 'text-gray-400', 'border-b', 'w-full', 'hover:text-gray-700',);
-addCommentTextarea.name = 'addComment';
-addCommentTextarea.id = 'addComment';
-addCommentTextarea.placeholder = 'Add your comment here ...';
-addCommentTextarea.rows = 0; 
-
-//comment button
-const addCommentButton = document.createElement('button');
-addCommentButton.classList.add('text-sm', 'text-white', 'bg-blue',  'py-1', 'px-2', 'my-2', 'border-none','hover:bg-lightBlue', 'rounded-3xl');
-addCommentButton.name = 'add Comment';
-addCommentButton.id = 'postComment';
-addCommentButton.textContent = 'Post comment';
-
+  // Create the container for like and comment counts
+  const likeCommentContainer = document.createElement('div');
+  likeCommentContainer.classList.add('post', 'flex',  'mt-4');
+  likeCommentContainer.id = 'likeCommentContainer';
+  
+  // Create the container for like count
+  const likeCountContainer = document.createElement('span');
+  likeCountContainer.classList.add('flex', 'pr-6');
+  likeCountContainer.id = 'likeCountContainer'; 
+  
+  const likeLink = document.createElement('a');
+  likeLink.href = '';
+  const likeIcon = document.createElement('img');
+  likeIcon.classList.add('w-5', 'h-5');
+  likeIcon.src = '../Images/unlike.png';
+  likeIcon.alt = 'Like Icon';
+  likeLink.id = 'likeLink';
+  
+  const likeCount = document.createElement('span');
+  likeCount.classList.add('text-sm', 'ml-1');
+  likeCount.id = 'likeCount';
+  
+  let isLiked = false;
+  let likesTotal = 0;
+  const apiUrlIsLiked = `http://localhost:8005/users/getLikesForPost/${post.post_id}`;
+  axios.get(apiUrlIsLiked)
+  .then(response => {
+    //loop through the followers and check if the user is following
+    response.data.forEach(like => {
+      likesTotal++;
+      if(like === userId){
+        likeIcon.src = '../Images/likeIcon.png';
+        isLiked = true;
+      }
+    });
+  })
+  .finally(() => { 
+    likeCount.textContent = likesTotal; 
+  })
+  .catch(error => {
+    console.error('Error checking if user is following:', error);
+  })
+  
+  //like logic
+  let postId = post.post_id;
+  
+  likeLink.addEventListener('click', () => {
+    if (isLiked) {
+      handleUnlike(postId);
+      isLiked = false; 
+      likeIcon.src = '../Images/unlike.png';
+    } else {
+      handleLike(postId);
+      isLiked = true; 
+      likeIcon.src = '../Images/likeIcon.png'; 
+    }
+    
+    updateLikeButtonUI(isLiked);
+  })
+  
+  likeLink.appendChild(likeIcon);
+  likeCountContainer.appendChild(likeLink);
+  likeCountContainer.appendChild(likeCount);
+  
+  
+  // Create the container for comment count
+  const commentCountContainer = document.createElement('span');
+  commentCountContainer.classList.add('flex');
+  commentCountContainer.id = 'commentCountContainer';
+  
+  const commentLink = document.createElement('a');
+  commentLink.href = ''; // Add the correct URL for commenting
+  const commentIcon = document.createElement('img');
+  commentIcon.classList.add('w-5', 'h-5');
+  commentIcon.src = '../Images/comment.png';
+  commentIcon.alt = 'Comment Icon';
+  commentLink.id = 'commentLink';
+  commentLink.appendChild(commentIcon);
+  
+  const commentCount = document.createElement('span');
+  commentCount.classList.add('text-sm', 'ml-1');
+  commentCount.textContent = post.comment_count;
+  commentCount.id = 'commentCount';
+  
+  
+  // container for the "View all Comments" link
+  const viewAllCommentsContainer = document.createElement('div');
+  viewAllCommentsContainer.classList.add('flex-col');
+  viewAllCommentsContainer.id = 'viewAllCommentsContainer'; 
+  
+  //  "View all Comments" link
+  const viewAllCommentsLink = document.createElement('a');
+  viewAllCommentsLink.classList.add('text-sm', 'text-gray-600', 'hover:text-gray-400');
+  viewAllCommentsLink.href = `../htmlFiles/userComment.html?postId=${post.post_id}&userId=${post.user_id}`;
+  viewAllCommentsLink.textContent = 'View all Comments';
+  viewAllCommentsLink.id = 'viewAllCommentsLink';
+  
+  // textarea for adding comments
+  const addCommentTextarea = document.createElement('textarea');
+  addCommentTextarea.classList.add('mt-6', 'text-sm', 'text-gray-400', 'border-b', 'w-full', 'hover:text-gray-700',);
+  addCommentTextarea.name = 'addComment';
+  addCommentTextarea.id = 'addComment';
+  addCommentTextarea.placeholder = 'Add your comment here ...';
+  addCommentTextarea.rows = 0; 
+  
+  //add comment button
+  const addCommentButton = document.createElement('button');
+  addCommentButton.classList.add('text-sm', 'text-white', 'bg-blue',  'py-1', 'px-2', 'border-none','hover:bg-lightBlue', 'rounded-3xl');
+  addCommentButton.name = 'add Comment';
+  addCommentButton.id = 'postComment';
+  addCommentButton.textContent = 'Post comment';
+  
+  
+  let commentTotal = 0;
+  
+  const apiUrlIsCommented = `http://localhost:8005/users/getCommentsByPost/${post.post_id}`;
+  axios.get(apiUrlIsCommented)
+  .then(response => {
+    //loop through the followers and check if the user is following
+    response.data.forEach(comment => {
+      commentTotal++;
+    });
+  })
+  .finally(() => {
+    commentCount.textContent = commentTotal; 
+  })
+  
+  addCommentButton.addEventListener('click', () => {
+    const commentText = addCommentTextarea.value.trim();
+    if (commentText) {
+      addComment(post.post_id, commentText); 
+      successMessage.textContent = 'Comment added successfully';
+    } else {
+      errorMessage.textContent = 'Please enter a valid comment.';
+    } setTimeout(() => {
+      errorMessage.textContent = '';
+      successMessage.textContent = '';
+    } , 2000);
+  });
+  
 // error and success message elements
 const errorMessage= document.createElement('p');
 errorMessage.classList.add('text-red-500', 'text-sm', 'mt-2');
@@ -252,7 +318,6 @@ addCommentButton.addEventListener('click', () => {
 
  return postSection;
 }
-
 function addComment(postId, commentText) {
   const apiUrlAddComment = 'http://localhost:8005/users/addComment';
   const requestBody = {
@@ -261,24 +326,68 @@ function addComment(postId, commentText) {
     comment_text: commentText,
   };
 
-  const errorMessage = document.querySelector('#postErrorCommentContainer > p.text-red-500');
-  const successMessage = document.querySelector('#postErrorCommentContainer > p.text-green-500');
   const addCommentTextarea = document.querySelector('#addComment');
 
   axios.post(apiUrlAddComment, requestBody)
     .then(response => {
       addCommentTextarea.value = '';
-      errorMessage.textContent = '';
-      successMessage.textContent = 'Comment added successfully';
-      setTimeout(() => {
-        successMessage.textContent = '';
-      }, 2000);
     })
     .catch(error => {
       console.error('Error adding comment:', error);
     });
 }
 
+//function to update the like button and count
+function updateLikeButtonUI(isLiked) {
+  const likeIcon = document.querySelector('#likeIcon');
+  const likeCount = document.querySelector('#likeCount');
+  if (isLiked) {
+    likeIcon.src = '../Images/likeIcon.png';
+    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+  } else {
+    likeIcon.src = '../Images/unlike.png';
+    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+  }
+}
 
+//function to handle like
+function handleLike(postId) {
+  const apiUrlLike = `http://localhost:8005/users/addLikeToPost/${postId}`;
+  axios.post(apiUrlLike, { user_id: userId })
+    .then(response => {
+      const result = response.data.result;
+      if (result === 1) {
+        isLiked = true; // Toggle the isLiked state
+        updateLikeButtonUI(isLiked);
+      } else if (result === 0) {
+        console.log('User has already liked this post.');
+      } else {
+        console.log('Like failed for some reason.');
+      }
+    })
+    .catch(error => {
+      console.error('Error liking post:', error);
+    });
+  }
+
+  //function to handle unlike
+function handleUnlike(postId) {
+  const apiUrlUnlike = `http://localhost:8005/users/removeLikeFromPost/${postId}`;
+  axios.post(apiUrlUnlike, { user_id: userId })
+    .then(response => {
+      const result = response.data.result;
+      if (result === 1) {
+        isLiked = false; // Toggle the isLiked state
+        updateLikeButtonUI(isLiked);
+      } else if (result === 0) {
+        console.log('User has not liked this post.');
+      } else {
+        console.log('Unlike failed for some reason.');
+      }
+    })
+    .catch(error => {
+      console.error('Error unliking post:', error);
+    });
+  }
 
 })
