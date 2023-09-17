@@ -49,19 +49,20 @@ let userId = getUserIdFromURL();
 
 fetchPostsAndUserProfile(userId);
 
-// const viewFollowingButton = document.getElementById('view-following-button');
-// const viewFollowersButton = document.getElementById('view-followers-button');
 
-// // Add click event listeners to the buttons
-// viewFollowingButton.addEventListener('click', function () {
-//     const user_id = viewFollowingButton.getAttribute('data-userid');
-//     window.location.href = `../htmlFiles/userFollowing.html?user_id=${user_id}`;
-// });
+const viewFollowingButton = document.getElementById('view-following-button');
+const viewFollowersButton = document.getElementById('view-followers-button');
 
-// viewFollowersButton.addEventListener('click', function () {
-//     const user_id = viewFollowersButton.getAttribute('data-userid');
-//     window.location.href = `../htmlFiles/userFollowers.html?user_id=${user_id}`;
-// });
+// Add click event listeners to the buttons
+viewFollowingButton.addEventListener('click', function () {
+    const user_id = viewFollowingButton.getAttribute('data-userid');
+    window.location.href = `../htmlFiles/userFollowing.html?user_id=${userId}`;
+});
+
+viewFollowersButton.addEventListener('click', function () {
+    const user_id = viewFollowersButton.getAttribute('data-userid');
+    window.location.href = `../htmlFiles/userFollowers.html?user_id=${userId}`;
+});
 
 
 function createPostElement(post, userProfile, loggedUserProfile) {

@@ -78,7 +78,11 @@ function viewFollowers() {
         });
 }
 
-// Add an event listener to fetch and display followers when the page loads
 document.addEventListener('DOMContentLoaded', viewFollowers);
+
+const backButton = document.getElementById('back-button');
+backButton.addEventListener('click', function () {
+  window.history.back();
+})
 
 })

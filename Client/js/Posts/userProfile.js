@@ -45,12 +45,12 @@ const viewFollowersButton = document.getElementById('view-followers-button');
 viewFollowingButton.addEventListener('click', function () {
   // const user_id = '06423759-615f-4155-a222-64a79cac4b04';
     const user_id = viewFollowingButton.getAttribute('data-userid');
-    window.location.href = `../htmlFiles/userFollowing.html?user_id=${user_id}`;
+    window.location.href = `../htmlFiles/userFollowing.html?user_id=${userId}`;
 });
 
 viewFollowersButton.addEventListener('click', function () {
     const user_id = viewFollowersButton.getAttribute('data-userid');
-    window.location.href = `../htmlFiles/userFollowers.html?user_id=${user_id}`;
+    window.location.href = `../htmlFiles/userFollowers.html?user_id=${userId}`;
 });
 
 
