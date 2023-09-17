@@ -43,7 +43,7 @@ const updateUserProfile = async (req, res) => {
         .input('userId', mssql.VARCHAR(255), userId)
         .input('firstName', mssql.NVarChar(50), first_name)
         .input('lastName', mssql.NVarChar(50), last_name)
-        .input('profileImageUrl', mssql.NVarChar(200), profile_image_url)
+        .input('profileImageUrl', mssql.NVarChar(255), profile_image_url)
         .execute('updateUserProfileProc');
         // console.log(error.message)
     res.status(200).json({ message: 'User profile edited successfully' });

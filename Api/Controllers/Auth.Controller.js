@@ -40,7 +40,7 @@ const userRegistration = async (req, res) => {
         .input('password', mssql.VarChar, hashedPwd)
         .execute('createNewLinkUpUserPROC')
 
-        const token = jwt.sign({email}, process.env.SECRET_KEY, {  expiresIn: 24*60*60 })
+        const token = await jwt.sign({email}, process.env.SECRET_KEY, {  expiresIn: 24*60*60 })
         return res.status(201).json({message: 'Account created successfully', token})
     }
     catch(error){
@@ -54,7 +54,7 @@ const userRegistration = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body
-        if(!req.body){
+        if(!email || !password){
             return res.status(400).json({error: 'The request body can not be empty'})
         } else {
             // check if email is registered
@@ -96,7 +96,7 @@ const getUserByEmail = async (req, res) => {
         
     return res.status(200).json(result.recordset[0]);
     }catch (error) {
-        console.error(error);
+        // console.error(error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -112,7 +112,7 @@ const getAllUsers = async (req, res) => {
   
       return res.status(200).json(result.recordset);
     } catch (error) {
-      console.error(error);
+    //   console.error(error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -120,16 +120,25 @@ const getAllUsers = async (req, res) => {
 // POST /users/forgot-password
 const forgotPassword = async (req, res) => {
     try {
+        // console.log(req.body);
         const { email } = req.body;
 
         if (!email) {
             return res.status(400).json({ error: 'Please input your email' });
         }
 
-        const user = await getUserByEmail(email);
+        // const user = await getUserByEmail(email);
+        const pool = await mssql.connect(sqlConfig);
+        
+        let user = await pool.request()
+        .input('email', email)
+        .execute('fetchUserByEmailPROC');
+
+        user = user.recordset[0];
+        
         
         if (!user) {
-            return res.status(400).json({ error: 'Email not found' });
+            return res.status(404).json({ error: 'Email not found' });
         }
         // Generate a dedicated reset token
         const payload = { email: user.email }; 
@@ -141,11 +150,13 @@ const forgotPassword = async (req, res) => {
             return resetPasswordUrl;
         }
 
-        const pool = await mssql.connect(sqlConfig);
+        // const pool = await mssql.connect(sqlConfig);
         await pool.request()
             .input('email', email)
             .input('token', token)
             .execute('genPwdResetTokenPROC'); 
+
+            // console.log(token);
 
         const transporter = nodemailer.createTransport({
             host: emailConfig.host,
@@ -174,6 +185,7 @@ const forgotPassword = async (req, res) => {
             }
         });
     } catch (error) {
+        // console.log(error);
         return res.status(500).json({ error: `Internal server error, ${error.message}` });
     }
 };
@@ -198,7 +210,7 @@ const resetPassword = async (req, res) => {
 
         // Hash the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-
+        console.log(hashedPassword);
         // Update the password in the database
         const pool = await mssql.connect(sqlConfig);
         const result = await pool.request()

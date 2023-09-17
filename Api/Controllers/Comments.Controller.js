@@ -80,42 +80,36 @@ const editComment = async (req, res) => {
     if (result.rowsAffected[0] === 1) {
       return res.status(200).json({ message: 'Comment edited successfully' });
     } else {
-      return res.status(404).json({ error: 'Comment not found or you do not have permission to edit it' });
+      return res.status(404).json({ error: 'Comment not found' });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-// Delete a Comment (including its child comments)
+
 const deleteComment = async (req, res) => {
   try {
-    const { comment_id, user_id } = req.body;
+    const { comment_id } = req.body; // Assuming only comment_id is needed
 
     const pool = await mssql.connect(sqlConfig);
 
     // Call the stored procedure to delete the comment and its child comments
     const result = await pool.request()
       .input('comment_id', mssql.Int, comment_id)
-      .input('user_id', mssql.VarChar, user_id)
       .execute('DeleteCommentProc');
 
-   if (result.rowsAffected[0] > 0) {
+    if (result.returnValue === 0) {
       return res.status(200).json({ message: 'Comment deleted successfully' });
-    } else if (result.rowsAffected[0] === 1) {
-      return res.status(404).json({ error: 'Comment not found or you do not have permission to delete it' });
-    } else {
-      // Handle unexpected return values, if any
-      return res.status(500).json({ error: 'Comment not found or you do not have permission to delete it' });
-    }
+    } else if (result.returnValue === 1) {
+      return res.status(404).json({ error: 'Comment not found' });
+    } 
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
-
+;
 
 module.exports = {
    addComment,

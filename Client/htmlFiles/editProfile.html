@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile Page
-    </title>
+    <title>Profile Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         @media (min-width: 640px) {
          
@@ -89,174 +89,136 @@
       </navbar>
      </header>
      <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
-        <div>
-            <div class="border-b border-gray-500 pb-4">
-                <div class="flex justify-between">
-                    <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                        <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                        <span class="flex-col pl-6">
-                          <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                          <p class="text-sm text-gray-500">Emma</p>
-                        </span>
-                      </div>
-                      <span>
-                        <a class="text-secondary  bg-gray-300 text-sm px-5 py-1 hover:bg-gray-400" id="editProfileLink" href="../htmlFiles/editProfile.html">Edit Profile</a>
+      <div>
+          <div class="border-b border-gray-500 pb-4">
+              <div class="flex justify-between">
+                  <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                      <img id="userProfile" class="4 rounded-full max-w-3xl h-11" src="" alt="Profile Picture">
+                      <span class="flex-col pl-6">
+                        <h5 id="userName"  class="text-base font-bold"></h5>
+                        <p id="userusername"  class="text-sm text-gray-500"></p>
                       </span>
-                </div>
-               <div class="flex space-x-6">
-                <span class="flex"><h5 class="pr-2 font-bold">100</h5> <a href="../htmlFiles/following.html" class="hover:text-gray-400" href="#">Following</a></span>
-                <span class="flex"><h5 class="pr-2 font-bold">1000</h5><a href="../htmlFiles/followers.html" class="hover:text-gray-400"  href="#"> Followers</a></span>
-               </div>
-            </div>
-            <span class="justify-center">
-                <h4 class="font-bold text-gray-500 text-2xl text-center underline">Posts</h4>
-            </span>
-            <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
-                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                  <span class="flex-col pl-6">
-                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                    <p class="text-sm text-gray-500">Emma</p>
-                  </span>
-                </div>
-                <span class="flex pb-2">
-                  <h4 class="font-bold pr-2">Yet</h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus excepturi enim ipsum aut numquam maiores quas aliquam, deleniti delectus inventore cum, laudantium blanditiis sequi, provident facilis amet quos omnis eaque.</p>
-                </span>
-                <div class="flex mt-4 mb-2"> <!-- Add margin-top for spacing -->
-                    <span class="flex pr-6">
-                      <a class="flex items-center" href=""><img class="w-5 h-5 text-sm ml-1" src="../Images/likeIcon.png" alt="like Icon">25 likes</a>
-                    </span>
+                    </div>
                     <span>
-                     <a  class="flex items-center" href=""> <img class="w-5 h-5 text-sm ml-1 " src="../Images/comment.png" alt="comment Icon">10 comments</a>
+                      <a class="text-primary  bg-blue text-sm px-5 py-1 hover:bg-blue-700" href="../htmlFiles/editProfile.html">Edit Profile</a>
                     </span>
-                  </div>
-                <div class="flex-col"> <!-- Add margin-top for spacing -->
-                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
-                </div>
-                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
-              </section>
-              <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
-                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                  <span class="flex-col pl-6">
-                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                    <p class="text-sm text-gray-500">Emma</p>
-                  </span>
-                </div>
-                <img src="../Images/profiepic.jpeg" alt="">
-                <span class="flex pb-2 pt-2">
-                  <h4 class="font-bold pr-2">Yet</h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus excepturi enim ipsum aut numquam maiores quas aliquam, deleniti delectus inventore cum, laudantium blanditiis sequi, provident facilis amet quos omnis eaque.</p>
-                </span>
-                <div class="flex mt-4 mb-2"> <!-- Add margin-top for spacing -->
-                    <span class="flex pr-6">
-                      <a class="flex items-center" href=""><img class="w-5 h-5 text-sm ml-1" src="../Images/likeIcon.png" alt="like Icon">25 likes</a>
-                    </span>
-                    <span>
-                     <a  class="flex items-center" href=""> <img class="w-5 h-5 text-sm ml-1 " src="../Images/comment.png" alt="comment Icon">10 comments</a>
-                    </span>
-                  </div>
-                <div class="flex-col"> <!-- Add margin-top for spacing -->
-                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
-                </div>
-                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
-              </section>
-        </div>
-    
-       </main>
-    
-     <!-- Footer Sidebar -->
-     <footer class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5">
-          <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-          <span class="flex-col pl-6">
-              <h5 class="text-lg font-bold">Emmanuella Eden</h5>
-              <p class="text-sm text-gray-500">Emma</p>
+              </div>
+             <div class="flex space-x-6">
+              <span class="flex"><h5 class="pr-2 font-bold">100</h5> <a href="../htmlFiles/userFollowing.html" class="hover:text-gray-400" href="#">Following</a></span>
+              <span class="flex"><h5 class="pr-2 font-bold">1000</h5><button id="view-followers-button" class="hover:text-gray-400"  href="../htmlFiles/userFollowers.html"> Followers</button></span>
+             </div>
+          </div>
+          <span class="justify-center">
+              <h4 class="font-bold text-gray-500 text-2xl text-center underline">Posts</h4>
           </span>
-     </footer>
-  </div>
+          
+             <!-- Posts Container -->
+             <section id="posts-container"> 
+              <!--user profile and follow status-->
+              <div id="userInfoFollowContainer">
+               <div id="userInfoDiv">
+                 <img id="profileImg" src="" alt="ProfilePic">
+                 <div class="flex-col pl-6">
+                 <a id="userLink" href="">
+                     <h4 id="userName"></h3>
+                     <p id="userUsername"></p>
+                 </a>
+               </div>
+               </div>
+                 <button id="followStatus">Post Comment</button>
+              </div>
+
+              <!--posts content and image if exist-->
+               <div id="postDiv">
+                  <img id="postImage" src="" alt="Images">
+               <span id="usernameContentContainer">
+                  <h4 id="usernameElement"> </h4>
+                  <p id="postContentElement"> </p>
+                </span>
+               </div>
+
+               <!--Likes and Comments count updates -->
+               <div id="likeCommentContainer">
+                 <span id="likeCountContainer">
+                   <a id="likeLink" href=""><img src="" alt="like Icon"></a>
+                      <span id="likeCount"></span>
+                 </span>
+                 <span id="commentCountContainer">
+                  <a id="commentLink" href=""> <img src="" alt="comment Icon"></a>
+                   <span id="commentCount"></span>
+                 </span>
+               </div>
+              
+                  <!--comments-->
+               <div id="viewAllCommentsContainer"> 
+                 <a id="viewAllCommentsLink'" href="">View all Comments</a>
+                 <textarea id="addComment" placeholder="Add your comment here ..."></textarea>
+               </div>
+              <span id="postErroCommentContainer">
+                  <button id="postComment">Post Comment</button>
+              </span>
+             </section>
+      
+          
+          <!-- User Profile Sidebar -->
+          <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5 space-x-5" id="user-profile">
+              <!-- User profile information will be displayed here dynamically -->
+              <img id="userProfileImg" class="w-16 h-16 rounded-full mb-4" src="" alt="Profile Picture">
+             <span class="flex-col">
+              <h4 id="userProfileName" class="text-lg font-bold mb-2"></h4>
+              <p id="userProfileusername" class="text-sm text-gray-500 mb-6"></p>
+             </span>
+          </div>
+      </div>
+  </main>
+</div>
+
 
    
 <!-- Modal -->
 <div id="postModal" class="fixed inset-0 flex items-center justify-center z-50 hidden ">
     <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
     <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto ">
-      <div id="successMessage" class="text-green-700 bg-green-300 text-center mt-2 mb-3"></div>
-      <div id="errorMessage" class="text-red-500 font-medium bg-red-100 mb-2 text-center mt-2"></div>
         <div class="modal-content py-4 text-left px-6 ">
             <!-- Modal title -->
             <div class="modal-header border-b border-gray-400">
                <span class="flex justify-between my-4">
                 <h5 class="text-2xl font-semibold ">Edit Profile</h5>
-                <a href="../htmlFiles/userProfile.html" id="closeModalButton" class="bg-gray-500 hover:bg-gray-300 text-white text-sm font-bold py-1 px-1 rounded">
+                <a href="../htmlFiles/userProfile.html" id="closeModalButton" class="bg-gray-500 hover:bg-gray-600 text-white text-sm font-bold py-1 px-1 rounded">
                     Cancel
                   </a>
                </span>
             </div>
             <span class="" id="closeModal"></span>
 
-            <div class=" flex  space-x-11 items-center mt-4">
-                <img class="w-16 h-16 rounded-3xl" src="https://i.imgur.com/6VBx3io.png" alt="">
-               <span>
-                <input type="file" id="fileInput" class="hidden">
-                <label for="fileInput" class="cursor-pointer bg-gray-200 hover:bg-gray-300  text-secondary text-sm font-normal w-full py-2  px-11 rounded">
-                    Choose a file
-                </label>
-               </span>
+            <form id="editProfileForm" enctype="multipart/form-data">
+              <div id="successMessage" class="text-green-700 bg-green-300 text-center mt-2 mb-3"></div>
+              <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-1 mb-2 rounded relative" role="alert"></div>
+             <span class="flex space-x-4 items-center my-4">
+                <img id="profileImage" class="w-16 h-16 rounded-3xl" src="" alt="">
+                <input type="file" id="fileInput" name="fileName" accept="image/*" class="text-sm">
+             </span>
+              <div class="my-6">
+                <label for="displayName" class="block text-sm font-medium text-gray-700 pb-2">Display Name</label>
+                <input type="text" id="displayName" name="displayName" class="border-gray-200 border text-sm w-full rounded bg-gray-100 px-4 py-2 mb-2" placeholder="Emmanuel Eden">
               </div>
-  
-            <!-- Modal body -->
-            <div class="modal-body mt-2">
-                <!-- Add your form fields and content here -->
-                <label for="name" class="block text-sm font-medium text-gray-700 py-4">Display Name</label>
-                    <input class="border-gray-200 border text-sm w-full rounded bg-gray-100 px-4 py-2 mb-2" type="text" placeholder="Emmanuel Eden" >
-                <!-- Other form fields can be added here -->
-            </div>
-  
-            <!-- Modal footer -->
-            <div class="modal-footer mt-4 flex justify-between">
-
-               <div class=" space-x-2">
-              <button id="editProfileSaveBtn" class=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded text-sm">
-                  save
-              </button>
-               </div>
-            </div>
-            <p id="selectedFileName" class="mt-2 text-gray-600 text-sm"></p>
+              <div class="mt-4">
+                <!-- //errorMessage -->
+                <div id
+            ></div>
+                <button type="submit" class="bg-blue hover:bg-blue-600 text-white font-bold py-1 px-4 rounded text-sm">
+                  Save
+                </button>
+              </div>
         </div>
     </div>
   </div>
-  
-
-<script>
-const addPostLink = document.getElementById('editProfileLink');
-const closeModal = document.getElementById('closeModal');
-const closeModalButton = document.getElementById('closeModalButton');
-const postModal = document.getElementById('postModal');
-const fileInput = document.getElementById('fileInput');
-const selectedFileName = document.getElementById('selectedFileName');
-
-addPostLink.addEventListener('click', () => {
-    postModal.classList.remove('hidden');
-});
-
-closeModal.addEventListener('click', () => {
-    postModal.classList.add('hidden');
-});
-
-closeModalButton.addEventListener('click', () => {
-    postModal.classList.add('hidden');
-});
-
-// Handle file selection and update the display element
-fileInput.addEventListener('change', () => {
-    const fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file selected';
-    selectedFileName.textContent = fileName;
-});
-</script>
+  <script src="../js/Posts/userProfile.js"></script>
+   
 
 <script src="../js/Posts/editProfile.js"></script>
-   
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
 </body>
 </html>

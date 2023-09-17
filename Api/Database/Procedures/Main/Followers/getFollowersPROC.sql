@@ -13,3 +13,4 @@ BEGIN
   FROM followersTable
   WHERE following_id = @user_id;
 END;
+

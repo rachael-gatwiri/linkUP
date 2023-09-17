@@ -1,7 +1,7 @@
 USE Linkup
 GO
 
--- DROP TABLE IF EXISTS likesTable;
+DROP TABLE IF EXISTS likesTable;
 
 CREATE TABLE likesTable (
   like_id INT IDENTITY(1,1) PRIMARY KEY,

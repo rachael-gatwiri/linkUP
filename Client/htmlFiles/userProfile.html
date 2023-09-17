@@ -6,6 +6,7 @@
     <title>Profile Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         @media (min-width: 640px) {
          
@@ -88,93 +89,100 @@
       </navbar>
      </header>
      <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
-        <div>
-            <div class="border-b border-gray-500 pb-4">
-                <div class="flex justify-between">
-                    <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                        <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                        <span class="flex-col pl-6">
-                          <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                          <p class="text-sm text-gray-500">Emma</p>
-                        </span>
-                      </div>
-                      <span>
-                        <a class="text-secondary  bg-gray-300 text-sm px-5 py-1 hover:bg-gray-400" href="../htmlFiles/editProfile.html">Edit Profile</a>
+      <div>
+          <div class="border-b border-gray-500 pb-4">
+              <div class="flex justify-between">
+                  <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                      <img id="userProfile" class="4 rounded-full max-w-3xl h-11" src="" alt="Profile Picture">
+                      <span class="flex-col pl-6">
+                        <h5 id="userName"  class="text-base font-bold"></h5>
+                        <p id="userusername"  class="text-sm text-gray-500"></p>
                       </span>
-                </div>
-               <div class="flex space-x-6">
-                <span class="flex"><h5 class="pr-2 font-bold">100</h5> <a href="../htmlFiles/following.html" class="hover:text-gray-400" href="#">Following</a></span>
-                <span class="flex"><h5 class="pr-2 font-bold">1000</h5><a href="../htmlFiles/followers.html" class="hover:text-gray-400"  href="#"> Followers</a></span>
-               </div>
-            </div>
-            <span class="justify-center">
-                <h4 class="font-bold text-gray-500 text-2xl text-center underline">Posts</h4>
+                    </div>
+                    <span>
+                      <a class="text-primary  bg-blue text-sm px-5 py-1 hover:bg-blue-700" href="../htmlFiles/editProfile.html">Edit Profile</a>
+                    </span>
+              </div>
+             <div class="flex space-x-6">
+              <span class="flex">
+                <h5 class="pr-2 font-bold">100</h5>
+                <button id="view-following-button" class="hover:text-gray-400" data-userid="123"> Following</button>
             </span>
-            <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
-                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                  <span class="flex-col pl-6">
-                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                    <p class="text-sm text-gray-500">Emma</p>
-                  </span>
-                </div>
-                <span class="flex pb-2">
-                  <h4 class="font-bold pr-2">Yet</h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus excepturi enim ipsum aut numquam maiores quas aliquam, deleniti delectus inventore cum, laudantium blanditiis sequi, provident facilis amet quos omnis eaque.</p>
-                </span>
-                <div class="flex mt-4 mb-2"> <!-- Add margin-top for spacing -->
-                    <span class="flex pr-6">
-                      <a class="flex items-center" href=""><img class="w-5 h-5 text-sm ml-1" src="../Images/likeIcon.png" alt="like Icon">25 likes</a>
-                    </span>
-                    <span>
-                     <a  class="flex items-center" href=""> <img class="w-5 h-5 text-sm ml-1 " src="../Images/comment.png" alt="comment Icon">10 comments</a>
-                    </span>
-                  </div>
-                <div class="flex-col"> <!-- Add margin-top for spacing -->
-                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
-                </div>
-                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
-              </section>
-              <section class="mt-4 border-b border-gray-500"> <!-- Add margin-top for spacing -->
-                <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                  <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                  <span class="flex-col pl-6">
-                    <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                    <p class="text-sm text-gray-500">Emma</p>
-                  </span>
-                </div>
-                <img src="../Images/profiepic.jpeg" alt="">
-                <span class="flex pb-2 pt-2">
-                  <h4 class="font-bold pr-2">Yet</h4>
-                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus excepturi enim ipsum aut numquam maiores quas aliquam, deleniti delectus inventore cum, laudantium blanditiis sequi, provident facilis amet quos omnis eaque.</p>
-                </span>
-                <div class="flex mt-4 mb-2"> <!-- Add margin-top for spacing -->
-                    <span class="flex pr-6">
-                      <a class="flex items-center" href=""><img class="w-5 h-5 text-sm ml-1" src="../Images/likeIcon.png" alt="like Icon">25 likes</a>
-                    </span>
-                    <span>
-                     <a  class="flex items-center" href=""> <img class="w-5 h-5 text-sm ml-1 " src="../Images/comment.png" alt="comment Icon">10 comments</a>
-                    </span>
-                  </div>
-                <div class="flex-col"> <!-- Add margin-top for spacing -->
-                  <a class="text-sm text-gray-400" href="../htmlFiles/userComment.html">View all Comments</a>
-                </div>
-                <input class="mt-10 text-sm text-gray-400 border-none" type="text" name="addComment" id="addComment" placeholder="Add Comment">
-              </section>
-        </div>
-    
-       </main>
-    
-     <!-- Footer Sidebar -->
-     <footer class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5">
-          <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-          <span class="flex-col pl-6">
-              <h5 class="text-lg font-bold">Emmanuella Eden</h5>
-              <p class="text-sm text-gray-500">Emma</p>
+            <span class="flex">
+                <h5 class="pr-2 font-bold">1000</h5>
+                <button id="view-followers-button" class="hover:text-gray-400" data-userid="456"> Followers</button>
+            </span>
+            
+             </div>
+          </div>
+          <span class="justify-center">
+              <h4 class="font-bold text-gray-500 text-2xl text-center underline">Posts</h4>
           </span>
-     </footer>
-  </div>z
-   
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+          
+             <!-- Posts Container -->
+             <section id="posts-container"> 
+              <!--user profile and follow status-->
+              <div id="userInfoFollowContainer">
+               <div id="userInfoDiv">
+                 <img id="profileImg" src="" alt="ProfilePic">
+                 <div class="flex-col pl-6">
+                 <a id="userLink" href="">
+                     <h4 id="userName"></h3>
+                     <p id="userUsername"></p>
+                 </a>
+               </div>
+               </div>
+                 <button id="followStatus">Post Comment</button>
+              </div>
+
+              <!--posts content and image if exist-->
+               <div id="postDiv">
+                  <img id="postImage" src="" alt="Images">
+               <span id="usernameContentContainer">
+                  <h4 id="usernameElement"> </h4>
+                  <p id="postContentElement"> </p>
+                </span>
+               </div>
+
+               <!--Likes and Comments count updates -->
+               <div id="likeCommentContainer">
+                 <span id="likeCountContainer">
+                   <a id="likeLink" href=""><img src="" alt="like Icon"></a>
+                      <span id="likeCount"></span>
+                 </span>
+                 <span id="commentCountContainer">
+                  <a id="commentLink" href=""> <img src="" alt="comment Icon"></a>
+                   <span id="commentCount"></span>
+                 </span>
+               </div>
+              
+                  <!--comments-->
+               <div id="viewAllCommentsContainer"> 
+                 <a id="viewAllCommentsLink'" href="">View all Comments</a>
+                 <textarea id="addComment" placeholder="Add your comment here ..."></textarea>
+               </div>
+              <span id="postErroCommentContainer">
+                  <button id="postComment">Post Comment</button>
+              </span>
+             </section>
+      
+          
+          <!-- User Profile Sidebar -->
+          <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5 space-x-5" id="user-profile">
+              <!-- User profile information will be displayed here dynamically -->
+              <img id="userProfileImg" class="w-16 h-16 rounded-full mb-4" src="" alt="Profile Picture">
+             <span class="flex-col">
+              <h4 id="userProfileName" class="text-lg font-bold mb-2"></h4>
+              <p id="userProfileusername" class="text-sm text-gray-500 mb-6"></p>
+             </span>
+          </div>
+      </div>
+  </main>
+</div>
+
+<script src="../js/Posts/userProfile.js"></script>
+<script  src="../js/Posts/userFollowing.js"></script>
+<script src="../js/Posts/userFollowers.js"></script>
+  <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
 </body>
 </html>

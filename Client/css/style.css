@@ -675,3 +675,17 @@ video {
   }
 }
 
+
+.post-content {
+  max-width: 500px; /* Adjust the maximum width as needed */
+  margin-right: 4rem; /* Add some right margin for spacing */
+}
+
+/* Media query for mobile screens */
+@media (max-width: 767px) {
+  .post-content {
+    max-width: 100%; /* Set to 100% for mobile screens to fit within the viewport */
+    margin-right: 0; /* Remove right margin for mobile screens */
+  }
+}
+

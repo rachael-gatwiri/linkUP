@@ -3,7 +3,7 @@ const router = Router()
 const {verifyToken} = require('../Middlewares/verifytoken')
 const { userRegistration, login, getUserByEmail, getAllUsers, forgotPassword, resetPassword} = require('../Controllers/Auth.Controller')
 const {getUserProfile, updateUserProfile} = require('../Controllers/userProfile.Controller')
-const {createPost, getPostsByUser, getAllPosts, editPost, deletePost} = require('../Controllers/Posts.Controller')
+const {createPost, getPostsByUser, getPostByPostId, getAllPosts, editPost, deletePost} = require('../Controllers/Posts.Controller')
 const {addLikeToPost, removeLikeFromPost, getLikesForPost} = require('../Controllers/Like.Controller')
 const { addComment, getCommentsByPost, getCommentsByComment, editComment, deleteComment} = require('../Controllers/Comments.Controller')
 const {followUser, getFollowers, getFollowing, unfollowUser,} = require('../Controllers/Follow.Controller')
@@ -25,13 +25,14 @@ router.put('/updateUserProfile/:userId', updateUserProfile)
 //Posts routes
 router.post('/createPost', createPost)
 router.get('/getPostsByUser/:userId', getPostsByUser)
+router.get('/getPostByPostId/:postId', getPostByPostId)
 router.get('/getAllPosts', getAllPosts)
 router.put('/editPost/:postId', editPost)
 router.delete('/deletePost', deletePost)
 
 //Like and unlike routes
-router.post('/addLikeToPost', addLikeToPost)
-router.delete('/removeLikeFromPost', removeLikeFromPost)
+router.post('/addLikeToPost/:post_id', addLikeToPost)
+router.delete('/removeLikeFromPost/:post_id', removeLikeFromPost)
 router.get('/getLikesForPost/:post_id', getLikesForPost)
 
 //comments routes

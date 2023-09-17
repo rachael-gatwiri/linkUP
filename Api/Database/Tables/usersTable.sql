@@ -3,7 +3,7 @@ GO
 
 -- users
 
--- DROP TABLE IF EXISTS usersTable;
+DROP TABLE IF EXISTS usersTable;
 
 CREATE TABLE usersTable (
     id VARCHAR(255) PRIMARY KEY,

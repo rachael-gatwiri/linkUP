@@ -1,4 +1,5 @@
 {
-    "livePreview.defaultPreviewPath": "/Client/htmlFiles/editProfile.html",
-    "liveServer.settings.port": 5501
+    "livePreview.defaultPreviewPath": "/Client/htmlFiles/home.html",
+    "liveServer.settings.port": 5501,
+    "microclimateProfiling.showProfiling": false
 }

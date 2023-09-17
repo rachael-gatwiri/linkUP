@@ -1,12 +1,8 @@
 USE Linkup;
 GO
 
--- DROP PROCEDURE IF EXISTS DeleteCommentProc;
--- GO
-
 CREATE OR ALTER PROCEDURE DeleteCommentProc
-  @comment_id INT,
-  @user_id VARCHAR(255)
+  @comment_id INT
 AS
 BEGIN
   BEGIN TRY
@@ -37,18 +33,27 @@ BEGIN
 
     IF @rowsAffected > 0
     BEGIN
-      RETURN 0; -- Success
+      -- Successfully deleted
+      RETURN 0;
     END
     ELSE
     BEGIN
-      RETURN 1; -- Comment not found or permission denied
+      -- Comment not found
+      RETURN 1;
     END
   END TRY
   BEGIN CATCH
-    -- Handle any errors that occur during the deletion
-    RETURN 2; -- Internal server error
+    -- Handle specific error cases
+    IF ERROR_NUMBER() = 547
+    BEGIN
+      -- Constraint violation (e.g., foreign key)
+      RETURN 3;
+    END
+    ELSE
+    BEGIN
+      -- Other unexpected errors
+      RETURN 2;
+    END;
   END CATCH;
 END;
-
-
-
+GO

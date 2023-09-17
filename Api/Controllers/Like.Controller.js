@@ -4,7 +4,8 @@ const { sqlConfig } = require('../Config/config');
 // Controller for adding a like to a post
 const addLikeToPost = async (req, res) => {
   try {
-    const { user_id, post_id } = req.body;
+    const { user_id} = req.body;
+    const { post_id } = req.params;
 
     const pool = await mssql.connect(sqlConfig);
 
@@ -32,7 +33,8 @@ const addLikeToPost = async (req, res) => {
 // Controller for removing a like from a post
 const removeLikeFromPost = async (req, res) => {
   try {
-    const { user_id, post_id } = req.body;
+    const { user_id} = req.body;
+    const { post_id } = req.params;
 
     const pool = await mssql.connect(sqlConfig);
 

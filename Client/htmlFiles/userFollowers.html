@@ -66,7 +66,7 @@
           </div>
           <div class="mt-4 pt-4">
               <span class="flex justify-items-center pt-4">
-                  <a id="homeLink" href=" " class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                  <a id="homeLink" href="../htmlFiles/home.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
                       <img class="w-6 h-6 mr-2" src="../Images/homeIcon.png" alt="Home Icon">Home
                   </a>
               </span>
@@ -77,7 +77,7 @@
               </span>
                 
               <span class="flex justify-items-center pt-4">
-                  <a id="profileLink" href="" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                  <a id="profileLink" href="../htmlFiles/userProfile.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
                       <img class="w-6 h-6 mr-2" src="../Images/profileIcon.png" alt="Profile Icon">Profile
                   </a>
               </span> 
@@ -105,79 +105,54 @@
          </div>
       </navbar>
      </header>
-      <!-- Main Content -->
-      <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
+     <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
         <div>
-            <div class="flex justify-between">
-                <h1 class="text-3xl pl-4 font-bold">Home</h1>
-                <!--Search -->
-                <input class="bg-gray-100 border-2 border-gray-200 pl-3 mr-4 text-sm" type="search" name="search" id="search" placeholder="Search">
+            <div class="border-b border-gray-500 pb-4">
+                <div class="flex justify-between">
+                    <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
+                        <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
+                        <span class="flex-col pl-6">
+                          <h5 class="text-base font-bold">Emmanuella Eden</h5>
+                          <p class="text-sm text-gray-500">Emma</p>
+                        </span>
+                      </div>
+                      <span>
+                        <button id="back-button" class= text-primary  bg-blue text-sm px-5 py-1 hover:bg-blue-700">Back</button>
+                      </span>
+                </div>
+               <!-- <div class="flex space-x-6">
+                <span class="flex"><h5 class="pr-2 font-bold">100</h5> <button class="hover:text-gray-400" href="../htmlFiles/userFollowing.html">Following</button></span>
+                <span class="flex"><h5 class="pr-2 font-bold">1000</h5><button id="view-followers-button" class="hover:text-gray-400"  href="../htmlFiles/userFollowers.html"> Followers</button></span>
+               </div> -->
+            </div>
+            <h1 class="text-2xl font-extrabold text-center pt-2 text-gray-500 underline">Followers</h1>
+            <div>
+              <section>
+                <div id="followers-container" class="flex justify-between mt-4">
+                    
+                </div>
+              </section>
+            </div>
             </div>
             
-            <!-- Posts Container -->
-            <section id="posts-container"  class="post" data-post-id="post_id_here">
-                <!-- Posts will be displayed here dynamically -->
-            </section>
-            
-            
-            <!-- User Profile Sidebar -->
-            <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5" id="user-profile">
-                <!-- User profile information will be displayed here dynamically -->
-                <img id="userProfileImg" class="w-16 h-16 rounded-full mb-4" src="" alt="Profile Picture">
-                <h3 id="userProfileName" class="text-lg font-bold mb-2"></h3>
-                <p id="userProfileusername" class="text-sm text-gray-500 mb-6"></p>
-            </div>
         </div>
-    </main>
+       </main>
+    
+     <!-- User Profile Sidebar -->
+     <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5 space-x-5" id="user-profile">
+      <!-- User profile information will be displayed here dynamically -->
+      <img id="userProfileImg" class="w-16 h-16 rounded-full mb-4" src="" alt="Profile Picture">
+     <span class="flex-col">
+      <h3 id="userProfileName" class="text-lg font-bold mb-2"></h3>
+      <p id="userProfileusername" class="text-sm text-gray-500 mb-6"></p>
+     </span>
   </div>
-
-<!-- Modal -->
-<div id="postModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-  <div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded shadow-lg z-50 overflow-y-auto">
-    <div class="modal-content py-4 text-left px-4">
-      <!-- Modal title -->
-      <div class="modal-header">
-        <h5 class="text-2xl font-semibold text-center">Add Post</h5>
-        <span class="" id="closeModal"></span>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-body mt-4">
-        <!-- error message -->
-        <form id="postForm" enctype="multipart/form-data">
-          <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-1 mb-2 rounded relative" role="alert"></div>
-          <textarea id="postContent" class="w-full border p-2" rows="4" placeholder="Write Caption..."></textarea>
-          <article class="flex flex-col md:flex-row justify-between mt-4">
-            <div class="md:w-1/2 flex space-x-2">
-              <img class="w-6" src="../Images/gallery.png" alt="">
-              <input name="file" type="file" id="postImage" accept="image/*" class="text-sm">
-            </div>
-            <div class="md:w-1/2 mt-4 md:mt-0 flex space-x-2">
-              <button type="submit" class="bg-blue hover:bg-blue-600 text-white font-bold px-4 py-1 rounded text-sm">
-                Add Post
-              </button>
-              <a href="../htmlFiles/home.html" id="closeModalButton" class="bg-gray-500 hover:bg-gray-600 text-white text-center text-sm font-bold px-4 py-1 rounded">
-                Close
-              </a>
-            </div>
-          </article>
-        </form>
-      </div>
-    </div>
-  </div>
+</div>
+</main>
 </div>
 
 
-  <script src="../js/Posts/home.js"></script>
-  <script src="../js/Posts/addpost.js"></script>
+   <script src="../js//Posts/userFollowers.js"></script>
     <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
 </body>
 </html>
-
-
-
-
-
-
-

@@ -11,5 +11,13 @@
     "not firefox <= 116",
     "not safari <= 16.5",
     "not samsung <= 21"
-  ]
+  ],
+  "hints": {
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
+    ]
+  }
 }
