@@ -124,9 +124,9 @@ function createPostElement(post) {
   userLink.appendChild(userUsername);
   userUsername.id = 'userUsername';
 
-
-  let 
-  followStatus = document.createElement('button');
+  let isFollowingUser = false;
+  let followStatus = document.createElement('button');
+  followStatus.id = 'followStatus';
   followStatus.textContent = 'Follow';
   followStatus.classList.add('Follow', 'text-sm', 'text-white', 'bg-blue', 'py-1', 'px-2', 'border-none', 'hover:bg-lightBlue', 'rounded');
   if (post.user_id === userId) {
@@ -135,7 +135,21 @@ function createPostElement(post) {
     followStatus.style.display = 'block';
   }
 
+  const apiUrlIsFollowing = `http://localhost:8005/users/getFollowers/${post.user_id}`;
+  axios.get(apiUrlIsFollowing)
+  .then(response => {
+    //loop through the followers and check if the user is following
+    response.data.forEach(follower => {
+      if(follower.follower_id === userId){
+        followStatus.textContent = 'Following';
+      }
+    });
 
+  })
+  .catch(error => {
+    console.error('Error checking if user is following:', error);
+  });  
+ 
   let isFollowing = post.isFollowing;
   let ownerUserId = post.user_id;
 
@@ -217,9 +231,43 @@ const likeLink = document.createElement('a');
 likeLink.href = '';
 const likeIcon = document.createElement('img');
 likeIcon.classList.add('w-5', 'h-5');
-likeIcon.src = userProfile ? '../Images/likeIcon.png' : '../Images/unlike.png';
+likeIcon.src = '../Images/unlike.png';
 likeIcon.alt = 'Like Icon';
 likeLink.id = 'likeLink';
+
+let isLiked = false;
+const apiUrlIsLiked = `http://localhost:8005/users/getLikesForPost/${post.post_id}`;
+axios.get(apiUrlIsLiked)
+.then(response => {
+  //loop through the followers and check if the user is following
+  response.data.forEach(like => {
+    if(like === userId){
+      likeIcon.src = '../Images/likeIcon.png';
+      isLiked = true;
+    }
+  });
+})
+.catch(error => {
+  console.error('Error checking if user is following:', error);
+})
+
+//like logic
+let postId = post.post_id;
+
+likeLink.addEventListener('click', () => {
+  if (isLiked) {
+    handleUnlike(postId);
+    isLiked = false; 
+    likeIcon.src = '../Images/unlike.png';
+  } else {
+    handleLike(postId);
+    isLiked = true; 
+    likeIcon.src = '../Images/likeIcon.png'; 
+  }
+  
+  updateLikeButtonUI(isLiked);
+})
+
 likeLink.appendChild(likeIcon);
 
 const likeCount = document.createElement('span');
@@ -229,6 +277,7 @@ likeCount.id = 'likeCount';
 
 likeCountContainer.appendChild(likeLink);
 likeCountContainer.appendChild(likeCount);
+
 
 // Create the container for comment count
 const commentCountContainer = document.createElement('span');
@@ -276,6 +325,22 @@ addCommentButton.name = 'add Comment';
 addCommentButton.id = 'postComment';
 addCommentButton.textContent = 'Post comment';
 
+addCommentButton.addEventListener('click', () => {
+  const commentText = addCommentTextarea.value.trim();
+  if (commentText) {
+    addComment(post.post_id, commentText); 
+    successMessage.textContent = 'Comment added successfully';
+  } else {
+    errorMessage.textContent = 'Please enter a valid comment.';
+  } setTimeout(() => {
+    errorMessage.textContent = '';
+    successMessage.textContent = '';
+  } , 2000);
+});
+
+
+
+
 // Get the error and success message elements
 const errorMessage= document.createElement('p');
 errorMessage.classList.add('text-red-500', 'text-sm', 'mt-2');
@@ -316,33 +381,6 @@ commentCountContainer.appendChild(commentCount);
 
 likeCommentContainer.appendChild(likeCountContainer);
 likeCommentContainer.appendChild(commentCountContainer);
-
-let isLiked = false; 
-
-likeLink.addEventListener('click', (event) => {
-  event.preventDefault();
-  if (isLiked) {
-    handleUnlike(post.post_id);
-  } else {
-    handleLike(post.post_id);
-  }
-});
-
-
-addCommentButton.addEventListener('click', () => {
-  const commentText = addCommentTextarea.value.trim();
-  if (commentText) {
-    addComment(post.post_id, commentText); 
-    successMessage.textContent = 'Comment added successfully';
-  } else {
-    errorMessage.textContent = 'Please enter a valid comment.';
-  } setTimeout(() => {
-    errorMessage.textContent = '';
-    successMessage.textContent = '';
-  } , 2000);
-});
-
-
 
  return postSection;
 }
@@ -402,9 +440,9 @@ function updateFollowButtonUI(isFollowing) {
     followStatus.textContent = 'Following';
   } else {
     followStatus.textContent = 'Follow';
-    followStatus.classList.remove('following', 'bg-blue', 'text-primary');
   }
 }
+
 
 function followUser(ownerUserId) {
   axios.post('http://localhost:8005/users/followUser', { follower_id: userId, following_id: ownerUserId })
@@ -425,8 +463,9 @@ function followUser(ownerUserId) {
 }
 
 function unfollowUser(ownerUserId) {
-  axios.delete('http://localhost:8005/users/unfollowUser', { follower_id: userId, following_id: ownerUserId })
+  axios.post('http://localhost:8005/users/unfollowUser', { follower_id: userId, following_id: ownerUserId })
     .then(response => {
+      console.log(response)
       const result = response.data.result;
       if (result === 1 || result === 2) {
         isFollowing = !isFollowing; // Toggle the isFollowing state
@@ -442,47 +481,57 @@ function unfollowUser(ownerUserId) {
     });
 }
 
+//function to update the like button and count
+function updateLikeButtonUI(isLiked) {
+  const likeIcon = document.querySelector('#likeIcon');
+  const likeCount = document.querySelector('#likeCount');
+  if (isLiked) {
+    likeIcon.src = '../Images/likeIcon.png';
+    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+  } else {
+    likeIcon.src = '../Images/unlike.png';
+    likeCount.textContent = parseInt(likeCount.textContent) - 1;
+  }
+}
 
-
-
-
-function handleLike(post_id) {
-  const apiUrlLikePost = `http://localhost:8005/users/addLikeToPost/${post_id}`;
-  const likeIcon = document.getElementById('likeIcon');
-  const likeCount = document.getElementById('likeCount');
-
-  axios.post(apiUrlLikePost)
+//function to handle like
+function handleLike(postId) {
+  const apiUrlLike = `http://localhost:8005/users/addLikeToPost/${postId}`;
+  axios.post(apiUrlLike, { user_id: userId })
     .then(response => {
-      const liked = response.data.liked;
-      const likeCountValue = response.data.likeCount;
-      likeCount.textContent = likeCountValue > 1 ? `${likeCountValue} likes` : (likeCountValue === 1 ? '1 like' : '');
-      // likeIcon.src = liked ? '../Images/likeIcon.png' : '../Images/unlike.png';
+      const result = response.data.result;
+      if (result === 1) {
+        isLiked = true; // Toggle the isLiked state
+        updateLikeButtonUI(isLiked);
+      } else if (result === 0) {
+        console.log('User has already liked this post.');
+      } else {
+        console.log('Like failed for some reason.');
+      }
     })
     .catch(error => {
       console.error('Error liking post:', error);
     });
-}
-function handleUnlike(post_id) {
-  const apiUrlUnlikePost = `http://localhost:8005/users/removeLikeFromPost/${post_id}`;
+  }
 
-  const likeIcon = document.getElementById('likeIcon');
-  const likeCount = document.getElementById('likeCount');
-
-  axios.delete(apiUrlUnlikePost)
+  //function to handle unlike
+function handleUnlike(postId) {
+  const apiUrlUnlike = `http://localhost:8005/users/removeLikeFromPost/${postId}`;
+  axios.post(apiUrlUnlike, { user_id: userId })
     .then(response => {
-      if (response.data.liked !== undefined) {
-        const liked = response.data.liked;
-        const likeCountValue = response.data.likeCount;
-        likeCount.textContent = likeCountValue > 1 ? `${likeCountValue} likes` : (likeCountValue === 1 ? '1 like' : '');
-        likeIcon.src = liked ? '../Images/likeIcon.png' : '../Images/unlike.png';
+      const result = response.data.result;
+      if (result === 1) {
+        isLiked = false; // Toggle the isLiked state
+        updateLikeButtonUI(isLiked);
+      } else if (result === 0) {
+        console.log('User has not liked this post.');
       } else {
-        console.error('User has not liked the post.');
+        console.log('Unlike failed for some reason.');
       }
     })
     .catch(error => {
       console.error('Error unliking post:', error);
     });
-}
-
+  }
 
 })

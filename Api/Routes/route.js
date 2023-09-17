@@ -6,7 +6,7 @@ const {getUserProfile, updateUserProfile} = require('../Controllers/userProfile.
 const {createPost, getPostsByUser, getPostByPostId, getAllPosts, editPost, deletePost} = require('../Controllers/Posts.Controller')
 const {addLikeToPost, removeLikeFromPost, getLikesForPost} = require('../Controllers/Like.Controller')
 const { addComment, getCommentsByPost, getCommentsByComment, editComment, deleteComment} = require('../Controllers/Comments.Controller')
-const {followUser, getFollowers, getFollowing, unfollowUser,} = require('../Controllers/Follow.Controller')
+const {followUser, getFollowers,getFollowersById, getFollowing, unfollowUser,} = require('../Controllers/Follow.Controller')
 
 
 //Auntentication routes
@@ -32,7 +32,7 @@ router.delete('/deletePost', deletePost)
 
 //Like and unlike routes
 router.post('/addLikeToPost/:post_id', addLikeToPost)
-router.delete('/removeLikeFromPost/:post_id', removeLikeFromPost)
+router.post('/removeLikeFromPost/:post_id', removeLikeFromPost)
 router.get('/getLikesForPost/:post_id', getLikesForPost)
 
 //comments routes
@@ -45,8 +45,9 @@ router.delete('/deleteComment', deleteComment)
 //Follow and unfollow routes
 router.post('/followUser', followUser)
 router.get('/getFollowers/:user_id', getFollowers)
+router.get('/getFollowersById/:follower_id', getFollowersById)
 router.get('/getFollowing/:user_id', getFollowing)
-router.delete('/unfollowUser', unfollowUser)
+router.post('/unfollowUser', unfollowUser)
 
 
 module.exports = router

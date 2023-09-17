@@ -93,6 +93,28 @@ const getFollowers = async (req, res) => {
   }
 };
 
+const getFollowersById = async (req, res) => {
+  try {
+    const follower_id = req.params.follower_id;
+
+    const pool = await mssql.connect(sqlConfig);
+
+    // Retrieve the list of users who are following the specified user
+    const result = await pool.request()
+      .input('follower_id', mssql.VARCHAR(255), follower_id)
+      .execute('getFollowersByIdPROC');
+
+    if (!result || !result.recordset) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    return res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 
 
 
@@ -119,5 +141,6 @@ module.exports = {
   followUser,
   unfollowUser,
   getFollowers,
+  getFollowersById,
   getFollowing,
 };
