@@ -28,7 +28,7 @@ router.get('/getPostsByUser/:userId', getPostsByUser)
 router.get('/getPostByPostId/:postId', getPostByPostId)
 router.get('/getAllPosts', getAllPosts)
 router.put('/editPost/:postId', editPost)
-router.delete('/deletePost', deletePost)
+router.delete('/deletePost/:userId/:postId', deletePost)
 
 //Like and unlike routes
 router.post('/addLikeToPost/:post_id', addLikeToPost)

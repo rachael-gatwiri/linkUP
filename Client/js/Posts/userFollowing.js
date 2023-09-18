@@ -50,68 +50,56 @@ axios.get(apiUserProfile)
 const backButton = document.getElementById('back-button');
 backButton.addEventListener('click', function () {
   window.history.back();
+
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function fetchFollowingUserProfile(user_id) {
+  const apiUserProfile = `http://localhost:8005/users/getUserProfile/${user_id}`;
+  return fetch(apiUserProfile)
+  .then(Response => {
+    const userProfile = Response.data;
+  })
+    .catch((error) => {
+      console.error('Error fetching user profile:', error);
+      return {};
+    });
+}
 
 // Function to fetch and display the users the current user is following
 function viewFollowing() {
   const user_id = getUserIdFromUrl();
-  // const user_id = '06423759-615f-4155-a222-64a79cac4b04';
 
-
-  axios.get(`http://localhost:8005/users/getFollowing?user_id=${user_id}`)
+  const apiUrlIsFollowing = `http://localhost:8005/users/getFollowing/${user_id}`;
+  axios.get(apiUrlIsFollowing)
       .then(response => {
           const followingContainer = document.getElementById('following-container');
-          followingContainer.innerHTML = ''; // Clear the existing following list
+          followingContainer.innerHTML = ''; 
+          followingContainer.classList.add('flex', 'flex-col', 'space-y-4');
 
           // Loop through the following data and display the users
           response.data.forEach(user => {
-              const userDiv = document.createElement('div');
-              userDiv.classList.add('flex', 'justify-between', 'mt-4');
+            console.log(user);
+            const userDiv = document.createElement('div');
+            userDiv.classList.add('flex-col', 'items-center', 'mb-4', 'pt-4', 'border-b', 'border-gray-300');
 
-              const userInfo = document.createElement('div');
-              userInfo.classList.add('flex', 'items-center', 'mb-4', 'space-x-11');
+            const userContainer = document.createElement('div');
+            userContainer.classList.add('flex', 'items-center', 'space-x-2');
 
-              const profilePic = document.createElement('img');
-              profilePic.classList.add('4', 'rounded-full', 'max-w-3xl', 'h-11');
-              profilePic.src = user.profilePicUrl;
-              profilePic.alt = 'Profile Picture';
+            const userProfileImg = document.createElement('img');
+            userProfileImg.classList.add('w-16', 'h-16', 'rounded-full', 'mr-4');
+            userProfileImg.src = user.profile_image_url;
+            userProfileImg.alt = 'Profile Picture';
 
-              const username = document.createElement('span');
-              username.classList.add('flex-col', 'pl-6');
+            const userName = document.createElement('h5');
+            userName.classList.add('text-lg', 'font-bold');
+            userName.textContent =`${user.first_name} ${user.last_name}`;
+            
+            userContainer.appendChild(userProfileImg);
+            userContainer.appendChild(userName);
+            userDiv.appendChild(userContainer);
+            followingContainer.appendChild(userDiv);
 
-              const nameLink = document.createElement('a');
-              nameLink.href = `../htmlFiles/otherUserProfile.html?userId=${user.id}`;
-              nameLink.textContent = user.fullName;
-
-              const usernameLink = document.createElement('p');
-              usernameLink.classList.add('text-sm', 'text-gray-500');
-              usernameLink.textContent = user.username;
-
-              username.appendChild(nameLink);
-              username.appendChild(usernameLink);
-
-              userInfo.appendChild(profilePic);
-              userInfo.appendChild(username);
-
-              userDiv.appendChild(userInfo);
-
-              followingContainer.appendChild(userDiv);
           });
       })
       .catch(error => {
@@ -119,7 +107,7 @@ function viewFollowing() {
       });
 }
 
-// Add an event listener to fetch and display following when the page loads
-document.addEventListener('DOMContentLoaded', viewFollowing);
+viewFollowing();
+
 
 });

@@ -86,12 +86,12 @@ const getAllPosts = async (req, res) => {
 const editPost = async (req, res) => {
     try {
       const { userId, content, postImage } = req.body;
-      const postId = req.params.postId;
-  
+      const {postId} = req.params;
+      console.log(req.params);
       if (!userId || !content || !postId) {
         return res.status(400).json({ error: 'User ID, post ID, and content are required' });
       }
-  
+      console.log(postId, userId, content, postImage);
       const pool = await mssql.connect(sqlConfig);
   
       // Update the post in the database
@@ -118,8 +118,8 @@ const editPost = async (req, res) => {
 // Delete a post
 const deletePost = async (req, res) => {
   try {
-    const { userId, postId } = req.body;
-
+    const { userId, postId } = req.params;
+    
     if (!userId || !postId) {
       return res.status(400).json({ error: 'User ID and post ID are required' });
     }
@@ -152,11 +152,13 @@ const deletePost = async (req, res) => {
       .execute('deletePostPROC');
 
     // Check if the post was successfully deleted
-    if (result.rowsAffected[0] === 1) {
+    if (result.rowsAffected[0] == 1) {
       return res.status(200).json({ message: 'Post deleted successfully' });
+    }else{
+      return res.status(400).json({ error: 'Failed to delete the post' }  )
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return res.status(500).json({ error: 'Failed to delete the post' });
   }
 };

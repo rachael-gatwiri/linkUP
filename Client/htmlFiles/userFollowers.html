@@ -105,38 +105,44 @@
          </div>
       </navbar>
      </header>
-     <main class="main-content md:m-auto md:w-3/5 p-4 bg-white">
-        <div>
-            <div class="border-b border-gray-500 pb-4">
-                <div class="flex justify-between">
-                    <div class="flex items-center mb-4"> <!-- Add margin-bottom for spacing -->
-                        <img class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Logo">
-                        <span class="flex-col pl-6">
-                          <h5 class="text-base font-bold">Emmanuella Eden</h5>
-                          <p class="text-sm text-gray-500">Emma</p>
-                        </span>
-                      </div>
-                      <span>
-                        <button id="back-button" class=" text-primary  bg-blue text-sm px-5 py-1 hover:bg-blue-700">Back</button>
+     <main id="main-content" class="main-content md:m-auto md:w-3/5 p-4 bg-white">
+      <div>
+          <div class="border-b border-gray-500 pb-4">
+              <div class="flex justify-between">
+                  <div class="flex items-center mb-4">
+                      <img id="profile-image" class="4 rounded-full max-w-3xl h-11" src="../Images/profiepic.jpeg" alt="Profile Picture">
+                      <span class="flex-col pl-6">
+                          <a id="user-profile-link" href="../htmlFiles/otherUserProfile.html">
+                              <h5 id="user-name" class="text-base font-bold">Emmanuella Eden</h5>
+                              <p id="user-username" class="text-sm text-gray-500">Emma</p>
+                          </a>
                       </span>
-                </div>
-               <!-- <div class="flex space-x-6">
-                <span class="flex"><h5 class="pr-2 font-bold">100</h5> <button class="hover:text-gray-400" href="../htmlFiles/userFollowing.html">Following</button></span>
-                <span class="flex"><h5 class="pr-2 font-bold">1000</h5><button id="view-followers-button" class="hover:text-gray-400"  href="../htmlFiles/userFollowers.html"> Followers</button></span>
-               </div> -->
-            </div>
-            <h1 class="text-2xl font-extrabold text-center pt-2 text-gray-500 underline">Followers</h1>
-            <div>
+                  </div>
+                  <span>
+                      <button id="back-button" class=" text-primary  bg-blue text-sm px-5 py-1 hover:bg-blue-700">Back</button>
+                    </span>
+              </div>
+          </div>
+         <h1 class="text-2xl font-extrabold text-center pt-2 text-gray-500 underline">Followers</h1>
+          <div>
               <section>
-                <div id="followers-container" class="flex justify-between mt-4">
-                    
-                </div>
+                  <div id="following-container" class="flex justify-between mt-4 item-center">
+                  <span class="flex items-center justify-between" >
+                   <img class="w-11 h-11 rounded -3xl mr-4" src="../Images/profiepic.jpeg" alt="">
+                   <p class="text-sm font-bold">Emanuel wmemak</p>
+                  </span>
+
+                      <!-- To do -->
+                      <!-- <span>
+                          <button class="text-sm px-2 text-primary bg-gray-400 rounded">Follow</button>
+                      </span> -->
+                     
+
+                  </div>
               </section>
-            </div>
-            </div>
-            
-        </div>
-       </main>
+          </div>
+      </div>
+  </main>
     
      <!-- User Profile Sidebar -->
      <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5 space-x-5" id="user-profile">

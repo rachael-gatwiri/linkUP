@@ -138,6 +138,45 @@
     </div>
 
   </div>
+
+  <!-- Modal -->
+<div id="postModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+    <div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <div class="modal-content py-4 text-left px-4">
+            <!-- Modal title -->
+            <div class="modal-header">
+                <h5 class="text-2xl font-semibold text-center">Edit Post</h5>
+                <span class="" id="closeModal"></span>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body mt-4">
+                <!-- Error message -->
+                <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-1 mb-2 rounded relative" role="alert"></div>
+                <!-- Edit post form -->
+                <form id="editPostForm" enctype="multipart/form-data">
+                    <textarea id="postContent" class="w-full border p-2" rows="4" placeholder="Change Caption..."></textarea>
+                    <article class="flex flex-col md:flex-row justify-between mt-4">
+                        <div class="md:w-1/2 flex space-x-2">
+                            <img class="w-6" src="../Images/gallery.png" alt="">
+                            <input name="file" type="file" id="postImage" accept="image/*" class="text-sm">
+                        </div>
+                        <div class="md:w-1/2 mt-4 md:mt-0 flex space-x-2">
+                            <button type="submit" class="bg-blue hover:bg-blue-600 text-white font-bold px-4 py-1 rounded text-sm">
+                                Save Changes
+                            </button>
+                            <button  id="closeModalButton" class="bg-gray-500 hover:bg-gray-600 text-white text-center text-sm font-bold px-4 py-1 rounded">
+                                Close
+                            </buton>
+                        </div>
+                    </article>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="../js/Posts/editPost.js"></script>
    <script src="../js/Posts/comment.js"></script>
 </body>
 </html>

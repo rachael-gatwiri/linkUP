@@ -1,16 +1,18 @@
+// Get the URL query string (e.g., "?postId=2063")
+const queryString = window.location.search;
+
+// Use a function to parse the query string and extract parameters
+function getParameterValue(parameterName) {
+  const parameters = new URLSearchParams(queryString);
+  return parameters.get(parameterName);
+}
+
+// Get the value of the "postId" parameter
+const postId = getParameterValue("postId");
+const userId = getParameterValue("userId");
+
 document.addEventListener("DOMContentLoaded", function () {
-  // Get the URL query string (e.g., "?postId=2063")
-    const queryString = window.location.search;
-
-    // Use a function to parse the query string and extract parameters
-    function getParameterValue(parameterName) {
-      const parameters = new URLSearchParams(queryString);
-      return parameters.get(parameterName);
-    }
-
-    // Get the value of the "postId" parameter
-    const postId = getParameterValue("postId");
-    const userId = getParameterValue("userId");
+  
   
     // API endpoints for fetching comments, user posts, and user profile
     const apiUrlPost = `http://localhost:8005/users/getPostByPostId/${postId}`;
@@ -70,6 +72,7 @@ axios.get(apiUserProfile)
   
     // Function to create a comment element
     function createCommentElement(comment) {
+
       const commentDiv = document.createElement('div');
       commentDiv.classList.add('flex-col', 'items-center', 'mb-4', 'pt-4', 'border-b', 'border-gray-300');
       
@@ -110,8 +113,8 @@ axios.get(apiUserProfile)
       const postContentElement = document.createElement('p');
       postContentElement.classList.add('text-sm');
 
+      const postImage = document.createElement('img');
       if (post.post_image_url) {
-        const postImage = document.createElement('img');
         postImage.classList.add('w-72', 'mb-2');
         postImage.src = post.post_image_url;
       
@@ -131,6 +134,52 @@ axios.get(apiUserProfile)
     
     
       postDiv.appendChild(postContentElement);
+
+
+      const isLoggedIn = loggedUserId === userId;
+      const editDeletePostBtn = document.getElementById("editDeletePostBtns");
+      const deletePostBtn = document.getElementById("deletePostBtn");
+      const editPostBtn = document.getElementById("editPostBtn");
+  
+      if (!isLoggedIn) {
+          editDeletePostBtn.style.display = "none";
+      }
+
+      // Add an event listener to the "Delete" button
+deletePostBtn.addEventListener("click", function () {
+  const confirmDelete = confirm("Are you sure you want to delete this post?");
+
+  if (confirmDelete) {
+      
+      axios.delete(`http://localhost:8005/users/deletePost/${userId}/${post.post_id}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+        
+      })
+      .then((response)=>{
+        console.log(response);
+        // window.location.reload()
+      })
+      .catch((e)=>{
+        console.log(e);
+        console.error('Error deleting post:', error);
+        alert("Error deleting post. Please try again later.");
+      })
+      .finally(()=>{
+        // window.location.reload()
+        window.location.href = './home.html'
+      })
+  }
+});
+
+editPostBtn.addEventListener("click", function () {
+  // window.location.href = `../htmlFiles/editPost.html?postId=${postId}&content=${encodeURIComponent(postContentElement)}&postImage=${encodeURIComponent(postImage)}`;
+  window.location.href = `../htmlFiles/editPost.html?postId=${postId}&content=${post.content}&userId=${userId}`;
+});
+
+
       
       return postDiv;
     }
@@ -157,7 +206,7 @@ axios.get(apiUserProfile)
         const postDiv = document.getElementById('postDiv');
         currentPost.forEach((post) => {
           const postElement = createPostElement(userProfile.username, post);
-          console.log(postElement)
+          // console.log(postElement)
           postDiv.appendChild(postElement);
         });
   

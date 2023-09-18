@@ -64,6 +64,70 @@ viewFollowersButton.addEventListener('click', function () {
     window.location.href = `../htmlFiles/userFollowers.html?user_id=${userId}`;
 });
 
+// count the number of followers and following
+const apiUrlFollowers = `http://localhost:8005/users/getFollowers/${userId}`;
+const apiUrlFollowing = `http://localhost:8005/users/getFollowing/${userId}`;
+
+axios.get(apiUrlFollowers)
+.then(response => {
+  response.data.forEach(follower => {
+    followersTotal++;
+  })
+  const followersCount = document.getElementById('followers-count');
+  followersCount.textContent = response.data.length;
+})
+.catch(error => {
+  console.error('Error fetching followers:', error);
+})
+
+axios.get(apiUrlFollowing)
+.then(response => {
+  response.data.forEach(follower => {
+    followingTotal++;
+  })
+  
+  const followingCount = document.getElementById('following-count');
+  followingCount.textContent = response.data.length;
+})
+.catch(error => {
+  console.error('Error fetching following:', error);
+})
+
+let followingTotal = 0;
+const apiUrlIsFollowing = `http://localhost:8005/users/getFollowing/${userId}`;
+axios.get(apiUrlIsFollowing)
+  .then(response => {        
+      // Loop through the following data and increment followingTotal
+      response.data.forEach(user => {
+        followingTotal++;
+      });
+  })
+  .finally(() => {
+    document.getElementById('following_total').textContent = followingTotal;
+  })
+  .catch(error => {
+      console.error('Error fetching following: ', error);
+  });
+
+let followersTotal = 0;
+const apiUrlIsFollowers = `http://localhost:8005/users/getFollowers/${userId}`;
+axios.get(apiUrlIsFollowers)
+  .then(response => {
+      // Loop through the followers data and increment followersTotal
+      response.data.forEach(user => {
+        followersTotal++;
+      });
+  })
+  .finally(() => {
+    document.getElementById('followers_total').textContent = followersTotal;
+  })
+  .catch(error => {
+      console.error('Error fetching following: ', error);
+  });
+
+
+
+
 
 function createPostElement(post, userProfile, loggedUserProfile) {
   // Post section
@@ -122,6 +186,7 @@ axios.get(apiUrlIsFollowing)
 .catch(error => {
   console.error('Error checking if user is following:', error);
 });  
+
 let isFollowing = userProfile.isFollowing;
 let ownerUserId = userId;
 
@@ -146,9 +211,6 @@ followStatus.addEventListener('click', () => {
   postContentElement.classList.add( 'text-sm');
   postContentElement.textContent = post.content;
   postContentElement.id = 'postContentElement';
-
-
-
 
    //the whole Post Container
    const postDiv = document.createElement('div');

@@ -33,6 +33,42 @@ function fetchPostsAndUserProfile(userId) {
     .catch(error => {
       console.error('Error fetching data:', error);
     });
+
+    let followingTotal = 0;
+    const apiUrlIsFollowing = `http://localhost:8005/users/getFollowing/${userId}`;
+    axios.get(apiUrlIsFollowing)
+      .then(response => {        
+          // Loop through the following data and increment followingTotal
+          response.data.forEach(user => {
+            followingTotal++;
+          });
+      })
+      .finally(() => {
+        document.getElementById('following_total').textContent = followingTotal;
+      })
+      .catch(error => {
+          console.error('Error fetching following: ', error);
+      });
+
+    let followersTotal = 0;
+    const apiUrlIsFollowers = `http://localhost:8005/users/getFollowers/${userId}`;
+    axios.get(apiUrlIsFollowers)
+      .then(response => {
+          // Loop through the followers data and increment followersTotal
+          response.data.forEach(user => {
+            followersTotal++;
+          });
+      })
+      .finally(() => {
+        document.getElementById('followers_total').textContent = followersTotal;
+      })
+      .catch(error => {
+          console.error('Error fetching following: ', error);
+      });
+
+      
+      
+
 }
 
 // Call the function with the user's ID
