@@ -32,4 +32,22 @@ describe('getting user by email', () => {
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith(mockUser);
     })
+
+    it('should fail if it cannot get user by email', async () => {
+        const req = {
+            body: {
+                email: 'test@gmail.com'
+            }
+        }
+        const res = {
+            status: jest.fn(() => res),
+            json: jest.fn()
+        }
+
+        jest.spyOn(mssql, 'connect').mockRejectedValueOnce(new Error('error'))
+
+        await getUserByEmail(req, res)
+        expect(res.status).toHaveBeenCalledWith(500)
+        expect(res.json).toHaveBeenCalledWith({error: 'Internal server error'})
+    })
 })

@@ -41,15 +41,14 @@
         }
 
         .post-content {
-  max-width: 10px; /* Adjust the maximum width as needed */
-  margin-right: 4rem; /* Add some right margin for spacing */
+  max-width: 10px; 
+  margin-right: 4rem;
 }
 
-/* Media query for mobile screens */
 @media (max-width: 767px) {
   .post-content {
-    max-width: 10%; /* Set to 100% for mobile screens to fit within the viewport */
-    margin-right: 4rem; /* Remove right margin for mobile screens */
+    max-width: 10%; 
+    margin-right: 4rem; 
   }
 }
 
@@ -66,7 +65,7 @@
           </div>
           <div class="mt-4 pt-4">
               <span class="flex justify-items-center pt-4">
-                  <a id="homeLink" href=" " class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                  <a id="homeLink" href="" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
                       <img class="w-6 h-6 mr-2" src="../Images/homeIcon.png" alt="Home Icon">Home
                   </a>
               </span>
@@ -77,7 +76,7 @@
               </span>
                 
               <span class="flex justify-items-center pt-4">
-                  <a id="profileLink" href="" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
+                  <a id="profileLink" href="../htmlFiles/userProfile.html" class="text-sm mb-2 flex items-center hover:bg-gray-100 rounded pl-2 pr-20 py-2">
                       <img class="w-6 h-6 mr-2" src="../Images/profileIcon.png" alt="Profile Icon">Profile
                   </a>
               </span> 
@@ -100,7 +99,7 @@
             <span class="flex items-center justify-between border-b border-gray-500 py-4 px-4">
                 <a id="homeLink" class="w-9 hover:bg-gray-300" href=""><img src="../Images/homeIcon.png" alt="home icon"></a>
                 <a id="addpostLink" href="../htmlFiles/addpost.html" class="w-7 hover:bg-gray-300"><img src="../Images/addpostIcon.png" alt="Add Post Icon"></a>
-                <a id="profileLink" class="w-7 hover:bg-gray-300" href=""><img src="../Images/profileIcon.png" alt="Profile Icon"></a>
+                <a id="profileLink" class="w-7 hover:bg-gray-300" href="../htmlFiles/userProfile.html"><img src="../Images/profileIcon.png" alt="Profile Icon"></a>
             </span>
          </div>
       </navbar>
@@ -110,22 +109,70 @@
         <div>
             <div class="flex justify-between">
                 <h1 class="text-3xl pl-4 font-bold">Home</h1>
-                <!--Search -->
-                <input class="bg-gray-100 border-2 border-gray-200 pl-3 mr-4 text-sm" type="search" name="search" id="search" placeholder="Search">
-            </div>
+                <div id="search-container">
+                  <input class="bg-gray-100 border-2 border-gray-200 pl-3 mr-4 text-sm" type="text" id="search-input" placeholder="Search...">
+                </div>
+                
+               </div>
             
             <!-- Posts Container -->
-            <section id="posts-container"  class="post" data-post-id="post_id_here">
-                <!-- Posts will be displayed here dynamically -->
-            </section>
-            
+            <section id="posts-container" class="comment"> 
+                <div id="userInfoFollowContainer" class="user-profile">
+                 <div id="userInfoDiv" class="user-profile">
+                   <img id="profileImg" src="" alt="ProfilePic">
+                   <div class="flex-col pl-6">
+                   <a id="userLink" href="">
+                       <h4 id="userName" class="comment"></h3>
+                       <p id="userUsername" class="comment"></p>
+                   </a>
+                 </div>
+                 </div>
+                 <button id="followStatus" class="text-sm bg-blue rounded" onclick="toggleFollowStatus()">Follow</button>
+                </div>
+
+               
+                 <div id="postDiv">
+                    <img  src="" alt="Images">
+                 <span id="usernameContentContainer">
+                    <h4 id="usernameElement" class="comment"> </h4>
+                    <p id="postContentElement" class="comment"> </p>
+                  </span>
+                 </div>
+
+
+                 <div id="likeCommentContainer" class="flex">
+                  <div class="like-section">
+                   <button class="like-button">
+                   <img id="likeIcon" src="" alt="Like Icon" class="w-5 h-5">
+                   <img id="likeIcon" src="" alt="Like Icon" class="w-5 h-5">
+                   </button>
+                  <span id="likeCount" class="like-count">0</span>
+                  </div>
+
+                   <span id="commentsContainer">
+                    <a id="commentLink" href=""> <img src="" alt="comment Icon"></a>
+                     <span id="commentCount"></span>
+                   </span>
+                 </div>
+                 <div id="viewAllCommentsContainer"> 
+                   <a id="viewAllCommentsLink'" href="">View all Comments</a>
+                   <textarea id="addComment" placeholder="Add your comment here ..."></textarea>
+                 </div>
+                <span id="postErroCommentContainer">
+                  <div id="errorMessage"></div>
+                  <div id="successMessage"></div>
+                    <button id="postComment">Post Comment</button>
+                </span>
+               </section>
+        
             
             <!-- User Profile Sidebar -->
-            <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5" id="user-profile">
-                <!-- User profile information will be displayed here dynamically -->
+            <div class="footer-sidebar hidden md:flex border-l border-gray-200 w-1/5 space-x-5" id="user-profile">
                 <img id="userProfileImg" class="w-16 h-16 rounded-full mb-4" src="" alt="Profile Picture">
+               <span class="flex-col">
                 <h3 id="userProfileName" class="text-lg font-bold mb-2"></h3>
                 <p id="userProfileusername" class="text-sm text-gray-500 mb-6"></p>
+               </span>
             </div>
         </div>
     </main>

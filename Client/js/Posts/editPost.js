@@ -66,6 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.getElementById("closeModalButton").addEventListener("click", function() {
-  window.location.href = "./userComment.html";
+  window.history.back();
 });
 

@@ -3,31 +3,40 @@ document.addEventListener('DOMContentLoaded', function() {
     const postContent = document.getElementById('postContent');
     const postImage = document.getElementById('postImage');
     const errorMessage = document.getElementById('errorMessage'); 
-    let postImageurl = ''
+    let postImageurl=""
 
+    
     function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.style.color = 'red';
+      errorMessage.textContent = message;
+      errorMessage.style.color = 'red';
     }
+    
+    console.log(postImage);
   
+    // postImage.addEventListener('change', async(e) => {
+    //   console.log("Reached here");
+    // })
+
     postImage.addEventListener('change', async(e) => {
-      const fileName = e.target.files
-      if(fileName){
-        const formData = new FormData()
-        
-        formData.append('file', fileName[0])
-        formData.append('upload_preset', 'lfyho4ew')
-        formData.append('cloud_name', 'LinkUp')
+      
+        // const fileName = e.target.files[0];
+        const fileName = e.target.files[0]; // Access the first file in the array
+      if (fileName) {
+        const formData = new FormData();
+        formData.append('file', fileName);
+        formData.append('upload_preset', 'lfyho4ew');
+        formData.append('cloud_name', 'LinkUp');
 
         try {
           const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dykqrsfny/image/upload', {
             method: 'POST',
             body: formData,
           });
-  
+
           if (cloudinaryResponse.ok) {
             const cloudinaryData = await cloudinaryResponse.json();
-            postImageurl = cloudinaryData.url
+            postImageurl = cloudinaryData.url;
+            console.log(postImageurl);
           } else {
             console.error('Failed to upload image to Cloudinary');
           }

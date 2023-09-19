@@ -27,20 +27,21 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const logoutButton = document.getElementById('logoutButton');
+      // let token = localStorage.getItem('token');
+      // if (!token) {
+      //   window.location.href = '../index.html';
+      // }
       
       logoutButton.addEventListener('click', function() {
-        // logout logice.g., clear session/cookies
-        
-        // Prevent going back to the previous page
+
         window.history.pushState(null, null, window.location.href);
         window.addEventListener('popstate', function() {
           window.history.pushState(null, null, window.location.href);
         });
-
-        // Redirect to the login page
         window.location.href = '../index.html';
       });
     });
+
   </script>
 </body>
 </html>

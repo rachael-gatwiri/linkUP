@@ -13,7 +13,7 @@ describe('getting all users', () => {
 
        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
               request: jest.fn().mockReturnThis(),
-              execute: jest.fn().mockResolvedValueOnce(mockResult)0
+              execute: jest.fn().mockResolvedValueOnce(mockResult)
               
        });
 
@@ -21,6 +21,18 @@ describe('getting all users', () => {
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith(mockResult.recordset);
 
+    })
 
+    it('should fail if it cannot get all users', async () => {
+              const res = {
+              status: jest.fn(() => res),
+              json: jest.fn()
+              }
+       
+              jest.spyOn(mssql, 'connect').mockRejectedValueOnce(new Error('Error'))
+       
+              await getAllUsers({}, res)
+              expect(res.status).toHaveBeenCalledWith(500)
+              expect(res.json).toHaveBeenCalledWith({error: 'Internal server error'})
     })
 })

@@ -16,9 +16,9 @@ const addComment = async (req, res) => {
       .input('parent_comment_id', mssql.Int, parent_comment_id || null)
       .input('comment_text', mssql.Text, comment_text)
       .execute('AddCommentOrReplyProc');
-    return res.status(201).json({ message: 'Comment added successfully' });
+    return res.status(200).json({ message: 'Comment added successfully' });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -37,7 +37,7 @@ const getCommentsByPost = async (req, res) => {
 
     return res.status(200).json(result.recordset);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -56,7 +56,7 @@ const getCommentsByComment = async (req, res) => {
 
     return res.status(200).json(result.recordset);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -68,6 +68,10 @@ const editComment = async (req, res) => {
     const { comment_id, user_id, new_comment_text } = req.body;
 
     const pool = await mssql.connect(sqlConfig);
+
+      if(!comment_id || !user_id || !new_comment_text) {
+          return res.status(400).json({ error: 'All inputs are required' });
+      }
 
     // Call the stored procedure to edit the comment
    const result = await pool.request()
@@ -83,14 +87,14 @@ const editComment = async (req, res) => {
       return res.status(404).json({ error: 'Comment not found' });
     }
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 const deleteComment = async (req, res) => {
   try {
-    const { comment_id } = req.body; // Assuming only comment_id is needed
+    const { comment_id } = req.body; 
 
     const pool = await mssql.connect(sqlConfig);
 
@@ -99,17 +103,21 @@ const deleteComment = async (req, res) => {
       .input('comment_id', mssql.Int, comment_id)
       .execute('DeleteCommentProc');
 
+    // console.log('Result Value:', result.returnValue); // Add this line for debugging
+
     if (result.returnValue === 0) {
       return res.status(200).json({ message: 'Comment deleted successfully' });
     } else if (result.returnValue === 1) {
       return res.status(404).json({ error: 'Comment not found' });
     } 
   } catch (error) {
-    console.error(error);
+    console.error(error); 
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-;
+
+
+
 
 module.exports = {
    addComment,

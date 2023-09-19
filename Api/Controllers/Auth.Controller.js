@@ -22,9 +22,9 @@ const userRegistration = async (req, res) => {
         }
         const pool = await mssql.connect(sqlConfig)
         const checkEmailQuery = await pool
-        .request()
-        .input('email', email)
-        .execute('fetchUserByEmailPROC')
+            .request()
+            .input('email', email)
+            .execute('fetchUserByEmailPROC')
         if(checkEmailQuery.rowsAffected[0] == 1){
             return res.status(400).json({error: 'Account creation failed! This email is already registered'})   
         }

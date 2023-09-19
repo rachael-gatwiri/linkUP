@@ -6,6 +6,10 @@ const followUser = async (req, res) => {
   try {
     const { follower_id, following_id } = req.body;
 
+    if(!follower_id || !following_id){
+      return res.status(400).json({error: 'All inputs are required'})
+    }
+
     const pool = await mssql.connect(sqlConfig);
 
     // Check if the relationship already exists to avoid duplicates
@@ -14,7 +18,7 @@ const followUser = async (req, res) => {
       .input('following_id', mssql.VarChar, following_id)
       .query('SELECT 1 FROM FollowersTable WHERE follower_id = @follower_id AND following_id = @following_id');
 
-    if (existingRelationship.rowsAffected[0] === 0) {
+    if (existingRelationship.rowsAffected[0] === 1) {
       // Insert the relationship if it doesn't exist
       await pool.request()
         .input('action', mssql.VarChar, 'follow') // Specify 'follow' as the action

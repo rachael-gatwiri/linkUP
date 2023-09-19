@@ -5,6 +5,32 @@ const userProfileName = document.getElementById('userProfileName');
 const userProfileUsername = document.getElementById('userProfileusername');
 
 let userId = localStorage.getItem('userId');
+const apiUrlUserProfile = `http://localhost:8005/users/getUserProfile/${userId}`;
+
+axios.get(apiUrlUserProfile)
+  .then(userResponse => {
+    const userProfileData = userResponse.data;
+
+    // Update the sidebar elements with the user profile data
+    userProfileImg.src = userProfileData.profile_image_url;
+    userProfileImg.alt = 'Profile Picture';
+    userProfileName.textContent = `${userProfileData.first_name} ${userProfileData.last_name}`;
+    userProfileUsername.textContent = userProfileData.username;
+
+    //update the user profile elements
+    const userImg = document.getElementById('userProfile');
+    userImg.src = userProfileData.profile_image_url;
+    userImg.alt = 'Profile Picture';
+    const userName = document.getElementById('userName');
+    userName.textContent = `${userProfileData.first_name} ${userProfileData.last_name}`;
+
+    const userUsername = document.getElementById('userusername');
+    userUsername.textContent = userProfileData.username;
+
+  })
+  .catch(error => {
+    console.error('Error fetching user profile:', error);
+  });
 
 // Fetch and display user posts and profile based on the user's ID
 function fetchPostsAndUserProfile(userId) {
@@ -157,12 +183,6 @@ userUsername.id = 'userUsername';
     usernameElement.classList.add('font-bold', 'pr-2', 'text-lg');
     usernameElement.textContent = userProfile.username; 
     usernameElement.id = 'usernameElement'
-  
-  // Display user profile in the sidebar
-    userProfileImg.src = userProfile ? userProfile.profile_image_url : '';
-    userProfileImg.alt = 'Profile Picture';
-    userProfileName.textContent = userProfile ? `${userProfile.first_name} ${userProfile.last_name}` : '';
-    userProfileUsername.textContent = userProfile ? userProfile.username : '';
   // Create the container for like and comment counts
   const likeCommentContainer = document.createElement('div');
   likeCommentContainer.classList.add('post', 'flex',  'mt-4');

@@ -82,7 +82,7 @@ axios.get(apiUserProfile)
       
       const userProfileImg = document.createElement('img');
       userProfileImg.classList.add('w-16', 'h-16', 'rounded-full', 'mr-4');
-      userProfileImg.src = comment.user_profile_image_url;
+      userProfileImg.src = comment.profile_image_url;
       userProfileImg.alt = 'Profile Picture';
       
       const userName = document.createElement('h5');

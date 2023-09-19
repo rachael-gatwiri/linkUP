@@ -99,6 +99,7 @@ function viewFollowing() {
             userContainer.appendChild(userName);
             userDiv.appendChild(userContainer);
             followingContainer.appendChild(userDiv);
+            
 
           });
       })

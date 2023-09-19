@@ -10,11 +10,7 @@ describe('Checking All fields', () => {
 it('should return an error if all fields are empty', async () => {
     const req = {
         body: {
-            firstName: '',
-            lastName: '',
-            username: '',
-            email: '',
-            password: ''
+           
         }
     }
     const res = {
