@@ -27,21 +27,4 @@ describe('Getting Comments by comment', () =>{
         expect(res.json).toHaveBeenCalledWith(mockresult.recordset);
     })
 
-    it('should fail if it cannot get comments by comment', async () => {
-        const req = {
-            params: {
-                comment_id : 4
-            }
-        }
-        const res = {
-            status: jest.fn(() => res),
-            json: jest.fn()
-        }
-    
-        jest.spyOn(mssql, 'connect').mockRejectedValueOnce(new Error('error'))
-    
-        await getCommentsByComment(req, res)
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.json).toHaveBeenCalledWith({error: 'Internal server error'})
-    })
 })

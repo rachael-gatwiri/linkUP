@@ -36,6 +36,13 @@ const getUserProfile = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   const userId = req.params.userId;
   const { first_name, last_name, profile_image_url } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+  if (!first_name || !last_name || !profile_image_url) {
+    return res.status(400).json({ error: 'first name, last name and profile image are required' });
+  }
   
   try {
     const pool = await mssql.connect(sqlConfig)
@@ -49,7 +56,7 @@ const updateUserProfile = async (req, res) => {
     res.status(200).json({ message: 'User profile edited successfully' });
   } catch (error) {
     // console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 

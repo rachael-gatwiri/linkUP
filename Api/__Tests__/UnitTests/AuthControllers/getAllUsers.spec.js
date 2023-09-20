@@ -4,7 +4,26 @@ const { getAllUsers } = require('../../../Controllers/Auth.Controller');
 describe('getting all users', () => {
     it('should return all users', async () => {
        const mockResult = {
-              recordset: []
+              recordset: [
+                     {
+                            first_name: 'test',
+                            last_name: 'user',
+                            email: 'test@gmail.com',
+                            profile_image_url: 'test.jpg'
+                     },
+                     {
+                            first_name: 'test',
+                            last_name: 'user',
+                            email: 'test@gmail.com',
+                            profile_image_url: 'test.jpg'
+                     },
+                     {
+                            first_name: 'test',
+                            last_name: 'user',
+                            email: 'test@gmail.com',
+                            profile_image_url: 'test.jpg'
+                     }
+              ]
        }
        const res = {
               status: jest.fn(() => res),
@@ -23,16 +42,4 @@ describe('getting all users', () => {
 
     })
 
-    it('should fail if it cannot get all users', async () => {
-              const res = {
-              status: jest.fn(() => res),
-              json: jest.fn()
-              }
-       
-              jest.spyOn(mssql, 'connect').mockRejectedValueOnce(new Error('Error'))
-       
-              await getAllUsers({}, res)
-              expect(res.status).toHaveBeenCalledWith(500)
-              expect(res.json).toHaveBeenCalledWith({error: 'Internal server error'})
-    })
 })

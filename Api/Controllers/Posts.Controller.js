@@ -25,7 +25,7 @@ const createPost = async (req, res) => {
     if (result.rowsAffected[0] == 1) {
       return res.status(201).json({ message: 'Post created successfully' });
     } else {
-      return res.status(500).json({ error: 'Failed to create the post' });
+      return res.status(400).json({ error: 'Failed to create the post' });
     }
   } catch (error) {
     console.error(error);
@@ -86,12 +86,12 @@ const getAllPosts = async (req, res) => {
 const editPost = async (req, res) => {
     try {
       const { userId, content, postImage } = req.body;
-      const {postId} = req.params;
-      console.log(req.params);
+      const { postId } = req.params;
+      // console.log(req.params);
       if (!userId || !content || !postId) {
         return res.status(400).json({ error: 'User ID, post ID, and content are required' });
       }
-      console.log(postId, userId, content, postImage);
+      // console.log(postId, userId, content, postImage);
       const pool = await mssql.connect(sqlConfig);
   
       // Update the post in the database
@@ -105,8 +105,8 @@ const editPost = async (req, res) => {
       // Check if the post was successfully updated
       if (result.rowsAffected[0] === 1) {
         return res.status(200).json({ message: 'Post updated successfully' });
-      } else {
-        return res.status(500).json({ error: 'Failed to update the post' });
+      } else if (result.rowsAffected[0] === 0) {
+        return res.status(400).json({ error: 'Failed to update the post' });
       }
     } catch (error) {
       console.error(error);
@@ -127,23 +127,23 @@ const deletePost = async (req, res) => {
     const pool = await mssql.connect(sqlConfig);
 
     // Check if the user exists in the usersTable
-    const userCheckResult = await pool.request()
-      .input('user_id', mssql.VarChar, userId)
-      .query('SELECT 1 FROM usersTable WHERE id = @user_id');
+    // const userCheckResult = await pool.request()
+    //   .input('user_id', mssql.VarChar, userId)
+    //   .query('SELECT 1 FROM usersTable WHERE id = @user_id');
 
-    if (userCheckResult.recordset.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    // if (userCheckResult.recordset.length === 0) {
+    //   return res.status(404).json({ error: 'User not found' });
+    // }
 
     // Check if the post belongs to the user
-    const postCheckResult = await pool.request()
-      .input('user_id', mssql.VarChar, userId)
-      .input('post_id', mssql.Int, postId)
-      .query('SELECT 1 FROM postsTable WHERE post_id = @post_id AND user_id = @user_id');
+    // const postCheckResult = await pool.request()
+    //   .input('user_id', mssql.VarChar, userId)
+    //   .input('post_id', mssql.Int, postId)
+    //   .query('SELECT 1 FROM postsTable WHERE post_id = @post_id AND user_id = @user_id');
 
-    if (postCheckResult.recordset.length === 0) {
-      return res.status(403).json({ error: 'Access denied: Post does not belong to this user or does not exist' });
-    }
+    // if (postCheckResult.recordset.length === 0) {
+    //   return res.status(403).json({ error: 'Access denied: Post does not belong to this user or does not exist' });
+    // }
 
     // Delete the post from the database
     const result = await pool.request()
@@ -154,12 +154,10 @@ const deletePost = async (req, res) => {
     // Check if the post was successfully deleted
     if (result.rowsAffected[0] == 1) {
       return res.status(200).json({ message: 'Post deleted successfully' });
-    }else{
-      return res.status(400).json({ error: 'Failed to delete the post' }  )
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ error: 'Failed to delete the post' });
+    // console.log(error);
+    return res.status(500).json({ error: 'Internal Server error' });
   }
 };
 

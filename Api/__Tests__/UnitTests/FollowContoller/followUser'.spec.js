@@ -70,13 +70,19 @@ describe('checking if user is already following', () => {
             status: jest.fn(() => res),
             json: jest.fn()
          }
+         mockresult = {
+            recordset: [
+                {
+                    follower_id: 'hsakkal152672_wj27829',
+                    following_id : 'gsjkal42627'
+                }
+            ]
+         }
 
-            jest.spyOn(mssql, 'connect').mockReturnVale({
+            jest.spyOn(mssql, 'connect').mockReturnValue({
                 request: jest.fn().mockReturnThis(),
                 input: jest.fn().mockReturnThis(),
-                query: jest.fn().mockResolvedValueOnce({
-                    rowsAffected: [0]
-                })
+                query: mockresult
             })
 
             await followUser(req, res)
@@ -99,7 +105,7 @@ describe('checking if user is already following', () => {
        jest.spyOn(mssql, 'connect').mockResolvedValue({
                 request: jest.fn().mockReturnThis(),
                 input: jest.fn().mockReturnThis(),
-                query: jest.fn().mockResolvedValueOnce({
+                execute: jest.fn().mockResolvedValueOnce({
                     rowsAffected: [1]
                 })
             })
