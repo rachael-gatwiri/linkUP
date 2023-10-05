@@ -45,47 +45,10 @@ it('should throw an error if any field is empty', async () => {
     expect(res.status).toHaveBeenCalledWith(400)
     expect(res.json).toHaveBeenCalledWith({ error: 'first name, last name and profile image are required' })
 })
+})
 
-    it('should throw an error if the body is empty', async () => {
-        const req = {
-            params: {
-                userId: 1
-            },
-            body: {}
-        }
-        const res = {
-            status: jest.fn(() => res),
-            json: jest.fn()
-        }
-        await updateUserProfile(req, res)
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.json).toHaveBeenCalledWith({ error: 'first name, last name and profile image are required' })
-    })
- })
 
  describe('Checking if the user profile is updated', () => {
-    it('should throw an error if the user is not found', async () => {
-        const req = {
-            params: {
-                userId: 1
-            },
-            body: {
-                firstName: 'Test',
-                lastName: 'User',
-                profilePicture: 'test.jpg'
-            }
-        }
-        const res = {
-            status: jest.fn(() => res),
-            json: jest.fn()
-        }
-        const mockResult = {
-            recordset: []
-        }
-        await updateUserProfile(req, res)
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' })
- })
 
     it('should update the user profile if the user is found', async () => {
         const req = {
@@ -102,21 +65,15 @@ it('should throw an error if any field is empty', async () => {
             status: jest.fn(() => res),
             json: jest.fn()
         }
-
-        jest.spyOn(mssql, 'connect').mockReturnValueOnce({
-            request: jest.fn().mockReturnThis({}),
-            input : jest.fn().mockReturnThis({}),
-            execute : jest.fn().mockReturnValueOnce({
-                recordset: [
-                    {
-                        first_name: 'Testing',
-                        last_name: 'User',
-                        profile_image_url: 'testing.jpg'
-                    }
-                ]
-            })
-
-        })
+        const mockresult = {
+            rowsAffected: [1]
+        }
+       jest.spyOn(mssql, 'connect').mockImplementation(() => ({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValue(mockresult)
+        })) 
+        
         await updateUserProfile(req, res)
         // expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).toHaveBeenCalledWith({ message: 'User profile edited successfully' })

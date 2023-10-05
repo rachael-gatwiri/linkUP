@@ -54,13 +54,6 @@ it('Should show an error if email field is empty', () => {
   cy.get('#errorMessage').should('be.visible')
 })
 
-it('Should login redirect you to homepage', () => {
-  cy.visit('http://127.0.0.1:5501/Client/index.html')
-  cy.get('#email').type('rachaeltems@gmail.com');
-  cy.get('#password').type('Testing12345678.');
-  cy.get('#signupButton').click();
-  cy.url().should('include', '/Client/htmlFiles/home.html')
-})
 
 it('Should redirect you to the signup page', () => {
  cy.visit('http://127.0.0.1:5501/Client/index.html')

@@ -23,7 +23,7 @@ const createPost = async (req, res) => {
 
     // Check if the post was successfully created
     if (result.rowsAffected[0] == 1) {
-      return res.status(201).json({ message: 'Post created successfully' });
+      return res.status(200).json({ message: 'Post created successfully' });
     } else {
       return res.status(400).json({ error: 'Failed to create the post' });
     }
@@ -88,11 +88,13 @@ const editPost = async (req, res) => {
       const { userId, content, postImage } = req.body;
       const { postId } = req.params;
       // console.log(req.params);
+     
+      // console.log(postId, userId, content, postImage);
+      const pool = await mssql.connect(sqlConfig);
+
       if (!userId || !content || !postId) {
         return res.status(400).json({ error: 'User ID, post ID, and content are required' });
       }
-      // console.log(postId, userId, content, postImage);
-      const pool = await mssql.connect(sqlConfig);
   
       // Update the post in the database
       const result = await pool.request()
@@ -109,7 +111,7 @@ const editPost = async (req, res) => {
         return res.status(400).json({ error: 'Failed to update the post' });
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   };

@@ -37,6 +37,9 @@ const updateUserProfile = async (req, res) => {
   const userId = req.params.userId;
   const { first_name, last_name, profile_image_url } = req.body;
 
+
+  const pool = await mssql.connect(sqlConfig)
+
   if (!userId) {
     return res.status(400).json({ error: 'User ID is required' });
   }
@@ -45,14 +48,15 @@ const updateUserProfile = async (req, res) => {
   }
   
   try {
-    const pool = await mssql.connect(sqlConfig)
-    await pool.request()
+   
+   const result = await pool.request()
         .input('userId', mssql.VARCHAR(255), userId)
         .input('firstName', mssql.NVarChar(50), first_name)
         .input('lastName', mssql.NVarChar(50), last_name)
         .input('profileImageUrl', mssql.NVarChar(255), profile_image_url)
         .execute('updateUserProfileProc');
         // console.log(error.message)
+        
     res.status(200).json({ message: 'User profile edited successfully' });
   } catch (error) {
     // console.error(error);

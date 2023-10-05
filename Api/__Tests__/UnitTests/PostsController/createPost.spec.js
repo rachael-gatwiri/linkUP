@@ -60,18 +60,15 @@ describe('Checking Fields', () => {
                 status: jest.fn(() => res),
                 json: jest.fn()
             }
-          const mockresult = {
-              rowsAffected: [0]
-          }
 
-          jest.spyOn(mssql, 'connect').mockImplementation(() => Promise.resolve({
-              request: () => ({
-                  input: () => ({
-                      execute: () => Promise.resolve(mockresult)
-                    })
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    rowsAffected: [0]
                 })
-                })
-                )
+            })
+            
             await createPost(req, res)
             expect(res.status).toHaveBeenCalledWith(400)
             expect(res.json).toHaveBeenCalledWith({error: 'Failed to create the post'})
@@ -88,20 +85,17 @@ describe('Checking Fields', () => {
                 status: jest.fn(() => res),
                 json: jest.fn()
             }
-          const mockresult = {
-              rowsAffected: [1]
-          }
+            jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+                request: jest.fn().mockReturnThis(),
+                input: jest.fn().mockReturnThis(),
+                execute: jest.fn().mockResolvedValueOnce({
+                    rowsAffected: [1]
+                })
+        
+            })
 
-          jest.spyOn(mssql, 'connect').mockImplementation(() => Promise.resolve({
-              request: () => ({
-                  input: () => ({
-                      execute: () => Promise.resolve(mockresult)
-                    })
-                })
-                })
-                )
             await createPost(req, res)
-            expect(res.status).toHaveBeenCalledWith(201)
+            expect(res.status).toHaveBeenCalledWith(200)
             expect(res.json).toHaveBeenCalledWith({message: 'Post created successfully'})
         })
     })

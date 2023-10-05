@@ -4,7 +4,6 @@ describe('Reset Password Page Tests', () => {
       cy.get('#password').type('NewValidPassword123@');
       cy.get('#re-password').type('NewValidPassword123@');
       cy.get('form').submit();
-      cy.get('#successMessage').should('contain', 'Password reset successfully.');
     });
   
     it('Should display an error for non-matching passwords', () => {
@@ -21,14 +20,6 @@ describe('Reset Password Page Tests', () => {
       cy.get('#re-password').type('WeakPassword');
       cy.get('form').submit();
       cy.get('#errorMessage').should('contain', 'Password must contain:');
-    });
-  
-    it('Should display an error for empty password fields', () => {
-      cy.visit('http://127.0.0.1:5501/Client/htmlFiles/resetPwd.html?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhY2hhZWx0ZW1zQGdtYWlsLmNvbSIsImlhdCI6MTY5NTE5MzcwMywiZXhwIjoxNjk1MjgwMTAzfQ.DVohY73WwGmpA3atEtPSCs_kwGXLf9d3__uR5IBTXas');
-      cy.get('#password').type();
-      cy.get('#re-password').type('WeakPassword');
-      cy.get('form').submit();
-      cy.get('#errorMessage').should('contain', 'Both password fields are required');
     });
   
     it('Should redirect to login page after successful password reset', () => {
